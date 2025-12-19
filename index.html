@@ -9,27 +9,38 @@
     <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-    <div id="hint">Click on the map to place your guess!</div>
+    <!-- Initial page-load spinner (solid black background + white compass, fades out) -->
+    <div id="initialSpinner" class="spinner-overlay spinner-overlay--initial" style="display: flex;" aria-hidden="true">
+        <img class="compass-spinner compass-spinner--white" src="black compass.png" alt="Loading" />
+    </div>
+
+    <!-- Next-round spinner (kept as-is: blurred overlay + black compass) -->
+    <div id="roundSpinner" class="spinner-overlay" style="display: none;" aria-hidden="true">
+        <img class="compass-spinner" src="black compass.png" alt="Loading" />
+    </div>
     
     <div id="container">
         <div id="panorama">
             <div id="snippitLabel">Snippit</div>
             <div id="miniMap"></div>
         </div>
-        <div id="map"></div>
+        <div id="splitter" class="splitter" role="separator" aria-orientation="vertical" aria-label="Resize panels" tabindex="0"></div>
+        <div id="map">
+            <div id="hint" class="map-overlay">Click on the map to place your guess!</div>
+
+            <div id="result" class="map-overlay" style="display: none;">
+                <h2>Result</h2>
+                <div class="distance" id="distance"></div>
+                <p id="resultText"></p>
+                <p class="location-info" id="actualLocationName"></p>
+                <p class="location-info" id="guessedLocationName"></p>
+            </div>
+        </div>
     </div>
 
     <div id="controls">
-        <button id="guessBtn" disabled>Make Guess</button>
+        <button id="guessBtn" disabled>Guess!</button>
         <button id="nextBtn" style="display: none;">Next Round</button>
-    </div>
-
-    <div id="result">
-        <h2>Result</h2>
-        <div class="distance" id="distance"></div>
-        <p id="resultText"></p>
-        <p class="location-info" id="actualLocationName"></p>
-        <p class="location-info" id="guessedLocationName"></p>
     </div>
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>

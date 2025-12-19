@@ -8,6 +8,16 @@ let polyline;
 let currentLocationName = '';
 
 let guessLocked = false;
+let nextRoundTimer = null;
+let initialSpinnerDismissed = false;
+
+// Splitter sizing (desktop/tablet)
+const MIN_PANORAMA_WIDTH_PX = 280;
+const MIN_MAP_WIDTH_PX = 280;
+const DEFAULT_MAP_WIDTH_PX = 400;
+
+let currentMapWidthPx = DEFAULT_MAP_WIDTH_PX;
+let invalidateScheduled = false;
 
 // Non-repeating randomizer: each location is used once per cycle.
 let locationDeck = [];
@@ -50,6 +60,9 @@ function pickNextLocation() {
 }
 
 function initMap() {
+    // Show initial spinner during page load/refresh.
+    showInitialSpinner();
+
     // Initialize main Leaflet map with continuous world wrapping
     map = L.map('map', {
         center: [20, 0],
@@ -77,8 +90,152 @@ function initMap() {
         if (!guessLocked) placeGuessMarker(e.latlng);
     });
 
-    // Start first round
-    newRound();
+    initSplitter();
+
+    // Start first round with the same small delay as Next Round.
+    nextRoundTimer = setTimeout(() => {
+        nextRoundTimer = null;
+        newRound();
+    }, 900);
+}
+
+function scheduleInvalidateSizes() {
+    if (invalidateScheduled) return;
+    invalidateScheduled = true;
+    requestAnimationFrame(() => {
+        invalidateScheduled = false;
+        if (map) map.invalidateSize();
+        if (miniMap) miniMap.invalidateSize();
+    });
+}
+
+function isMobileStackedLayout() {
+    return window.matchMedia('(max-width: 768px)').matches;
+}
+
+function applyMapWidthPx(mapWidthPx) {
+    const mapEl = document.getElementById('map');
+    if (!mapEl) return;
+
+    currentMapWidthPx = mapWidthPx;
+    mapEl.style.width = `${mapWidthPx}px`;
+    mapEl.style.flex = `0 0 ${mapWidthPx}px`;
+    scheduleInvalidateSizes();
+}
+
+function clearMapWidthOverride() {
+    const mapEl = document.getElementById('map');
+    if (!mapEl) return;
+    mapEl.style.width = '';
+    mapEl.style.flex = '';
+    scheduleInvalidateSizes();
+}
+
+function clampMapWidthPx(proposedMapWidthPx) {
+    const container = document.getElementById('container');
+    const splitter = document.getElementById('splitter');
+    if (!container || !splitter) return proposedMapWidthPx;
+
+    const containerWidth = container.getBoundingClientRect().width;
+    const splitterWidth = splitter.getBoundingClientRect().width;
+
+    const maxMapWidth = Math.max(0, containerWidth - splitterWidth - MIN_PANORAMA_WIDTH_PX);
+    const minMapWidth = Math.min(MIN_MAP_WIDTH_PX, maxMapWidth);
+
+    return Math.min(maxMapWidth, Math.max(minMapWidth, proposedMapWidthPx));
+}
+
+function initSplitter() {
+    const container = document.getElementById('container');
+    const splitter = document.getElementById('splitter');
+    const mapEl = document.getElementById('map');
+    if (!container || !splitter || !mapEl) return;
+
+    const syncForLayout = () => {
+        if (isMobileStackedLayout()) {
+            clearMapWidthOverride();
+            return;
+        }
+
+        // Ensure we start from a sensible width and keep it clamped on resizes.
+        const currentWidth = mapEl.getBoundingClientRect().width || currentMapWidthPx;
+        const nextWidth = clampMapWidthPx(currentWidth || DEFAULT_MAP_WIDTH_PX);
+        applyMapWidthPx(nextWidth);
+    };
+
+    syncForLayout();
+
+    let dragging = false;
+
+    const onPointerMove = (e) => {
+        if (!dragging || isMobileStackedLayout()) return;
+
+        const containerRect = container.getBoundingClientRect();
+        const splitterRect = splitter.getBoundingClientRect();
+        const splitterW = splitterRect.width;
+
+        // Pointer is on the splitter; treat its center as the boundary.
+        const proposedMapWidth = (containerRect.right - e.clientX) - splitterW / 2;
+        const clamped = clampMapWidthPx(proposedMapWidth);
+        applyMapWidthPx(clamped);
+    };
+
+    const stopDrag = () => {
+        if (!dragging) return;
+        dragging = false;
+        document.body.style.cursor = '';
+        document.body.style.userSelect = '';
+        scheduleInvalidateSizes();
+    };
+
+    splitter.addEventListener('pointerdown', (e) => {
+        if (isMobileStackedLayout()) return;
+        dragging = true;
+        splitter.setPointerCapture(e.pointerId);
+        document.body.style.cursor = 'col-resize';
+        document.body.style.userSelect = 'none';
+    });
+
+    splitter.addEventListener('pointermove', onPointerMove);
+    splitter.addEventListener('pointerup', stopDrag);
+    splitter.addEventListener('pointercancel', stopDrag);
+
+    window.addEventListener('resize', syncForLayout);
+}
+
+function showInitialSpinner() {
+    const el = document.getElementById('initialSpinner');
+    if (!el) return;
+    el.classList.remove('is-fading-out');
+    el.style.display = 'flex';
+}
+
+function fadeOutInitialSpinner() {
+    if (initialSpinnerDismissed) return;
+
+    const el = document.getElementById('initialSpinner');
+    if (!el) {
+        initialSpinnerDismissed = true;
+        return;
+    }
+
+    initialSpinnerDismissed = true;
+    el.classList.add('is-fading-out');
+
+    // Match CSS transition duration.
+    setTimeout(() => {
+        el.style.display = 'none';
+    }, 420);
+}
+
+function showRoundSpinner() {
+    const el = document.getElementById('roundSpinner');
+    if (el) el.style.display = 'flex';
+}
+
+function hideRoundSpinner() {
+    const el = document.getElementById('roundSpinner');
+    if (el) el.style.display = 'none';
 }
 
 function createMiniMap(lat, lng) {
@@ -140,6 +297,11 @@ function placeGuessMarker(latlng) {
 }
 
 function newRound() {
+    if (nextRoundTimer) {
+        clearTimeout(nextRoundTimer);
+        nextRoundTimer = null;
+    }
+
     // Clear previous markers and polyline
     if (guessMarker) map.removeLayer(guessMarker);
     if (actualMarker) map.removeLayer(actualMarker);
@@ -148,6 +310,7 @@ function newRound() {
     guessLocation = null;
     guessLocked = false;
     document.getElementById('guessBtn').disabled = true;
+    document.getElementById('nextBtn').disabled = false;
     document.getElementById('result').style.display = 'none';
     document.getElementById('nextBtn').style.display = 'none';
     document.getElementById('guessBtn').style.display = 'block';
@@ -163,6 +326,9 @@ function newRound() {
 
     // Reset main map view
     map.setView([20, 0], 2);
+
+    hideRoundSpinner();
+    fadeOutInitialSpinner();
 }
 
 function calculateDistance(lat1, lon1, lat2, lon2) {
@@ -263,7 +429,22 @@ function makeGuess() {
 
 // Event listeners
 document.getElementById('guessBtn').addEventListener('click', makeGuess);
-document.getElementById('nextBtn').addEventListener('click', newRound);
+
+document.getElementById('nextBtn').addEventListener('click', () => {
+    const guessBtn = document.getElementById('guessBtn');
+    const nextBtn = document.getElementById('nextBtn');
+
+    if (guessBtn) guessBtn.disabled = true;
+    if (nextBtn) nextBtn.disabled = true;
+
+    showRoundSpinner();
+
+    // Small intentional pause so the transition feels responsive and gives tiles a moment to load.
+    nextRoundTimer = setTimeout(() => {
+        nextRoundTimer = null;
+        newRound();
+    }, 500);
+});
 
 // Initialize on load
 window.addEventListener('load', initMap);
