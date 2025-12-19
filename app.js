@@ -7,6 +7,48 @@ let guessLocation = null;
 let polyline;
 let currentLocationName = '';
 
+let guessLocked = false;
+
+// Non-repeating randomizer: each location is used once per cycle.
+let locationDeck = [];
+let lastPickedLocationIndex = null;
+
+function shuffleInPlace(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+}
+
+function refillLocationDeck() {
+    locationDeck = locations.map((_, idx) => idx);
+    shuffleInPlace(locationDeck);
+
+    // Small quality tweak: avoid immediately repeating the last location across a cycle boundary (when possible).
+    if (locationDeck.length > 1 && lastPickedLocationIndex !== null) {
+        const nextIndex = locationDeck[locationDeck.length - 1];
+        if (nextIndex === lastPickedLocationIndex) {
+            const swapWith = locationDeck.length - 2;
+            [locationDeck[locationDeck.length - 1], locationDeck[swapWith]] = [locationDeck[swapWith], locationDeck[locationDeck.length - 1]];
+        }
+    }
+}
+
+function pickNextLocation() {
+    if (!Array.isArray(locations) || locations.length === 0) {
+        throw new Error('No locations available. Check locations.js');
+    }
+
+    if (locationDeck.length === 0) {
+        refillLocationDeck();
+    }
+
+    const index = locationDeck.pop();
+    lastPickedLocationIndex = index;
+    return locations[index];
+}
+
 function initMap() {
     // Initialize main Leaflet map with continuous world wrapping
     map = L.map('map', {
@@ -31,9 +73,8 @@ function initMap() {
 
     // Add click listener
     map.on('click', (e) => {
-        if (!guessLocation) {
-            placeGuessMarker(e.latlng);
-        }
+        // Allow moving the pin freely until the guess is submitted.
+        if (!guessLocked) placeGuessMarker(e.latlng);
     });
 
     // Start first round
@@ -105,6 +146,7 @@ function newRound() {
     if (polyline) map.removeLayer(polyline);
 
     guessLocation = null;
+    guessLocked = false;
     document.getElementById('guessBtn').disabled = true;
     document.getElementById('result').style.display = 'none';
     document.getElementById('nextBtn').style.display = 'none';
@@ -112,7 +154,7 @@ function newRound() {
     document.getElementById('hint').style.display = 'block';
 
     // Get random location
-    const location = locations[Math.floor(Math.random() * locations.length)];
+    const location = pickNextLocation();
     actualLocation = { lat: location.lat, lng: location.lng };
     currentLocationName = location.name;
 
@@ -137,6 +179,8 @@ function calculateDistance(lat1, lon1, lat2, lon2) {
 
 function makeGuess() {
     if (!guessLocation) return;
+
+    guessLocked = true;
 
     document.getElementById('hint').style.display = 'none';
 
