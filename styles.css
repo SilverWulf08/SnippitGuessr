@@ -382,6 +382,50 @@ button:disabled {
     transform: none;
 }
 
+/* Home button: Material-ish pill (surface + elevation) */
+button.home-button {
+    position: absolute;
+    top: 14px;
+    left: 14px;
+    z-index: 1200;
+    height: 36px;
+    padding: 0 14px;
+    border-radius: 999px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.25px;
+
+    background: rgba(36, 36, 36, 0.92);
+    color: rgba(255, 255, 255, 0.92);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(10px);
+    box-shadow: var(--shadow-sm);
+
+    transition: transform 180ms ease, filter 180ms ease, box-shadow 180ms ease;
+}
+
+button.home-button:hover {
+    transform: translateY(-2px) scale(1.06);
+    filter: brightness(1.06);
+    box-shadow: var(--shadow);
+}
+
+button.home-button:active {
+    transform: translateY(0) scale(1.02);
+    box-shadow: var(--shadow-sm);
+}
+
+button.home-button:focus-visible {
+    outline: 2px solid rgba(255, 255, 255, 0.25);
+    outline-offset: 3px;
+}
+
 /* Overlays anchored to the map panel */
 .map-overlay {
     position: absolute;
