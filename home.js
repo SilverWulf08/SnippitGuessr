@@ -61,7 +61,7 @@ function showModeIntro(mode) {
     }
 
     if (mode === 'endless') {
-        title.textContent = 'Endless mode';
+        title.textContent = 'Classic mode';
         desc.textContent = 'Play as many rounds as you like. After each guess you\'ll see how far off you were, so you can keep improving your world knowledge.';
         diff.style.display = 'none';
     } else if (mode === 'points') {
@@ -81,7 +81,7 @@ function showModeIntro(mode) {
             'Snippit is a quick geography guessing game.\n\n' +
             'You see a zoomed-in mini-map (the “snippit”) and you try to place your guess on the big world map.\n' +
             'After guessing you\'ll see the distance between your guess and the real location.\n\n' +
-            'Endless mode: keep playing and improve.\n' +
+            'Classic mode: keep playing and improve.\n' +
             'Points mode: 10 rounds, reach 1000 points — accuracy + speed matter.';
         diff.style.display = 'none';
 
