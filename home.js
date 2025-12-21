@@ -1,31 +1,6 @@
 const INITIAL_LOAD_DELAY_MS = 900;
 let initialSpinnerDismissed = false;
 
-const MAP_HINT_DISMISSED_KEY = 'snippit.mapHintDismissed';
-
-function getNavigationType() {
-    try {
-        const entry = performance.getEntriesByType('navigation')[0];
-        if (entry && entry.type) return entry.type;
-
-        if (performance && performance.navigation && typeof performance.navigation.type === 'number') {
-            if (performance.navigation.type === 1) return 'reload';
-            if (performance.navigation.type === 2) return 'back_forward';
-            if (performance.navigation.type === 0) return 'navigate';
-        }
-
-        return 'unknown';
-    } catch {
-        return 'unknown';
-    }
-}
-
-function clearMapHintOnReload() {
-    if (getNavigationType() === 'reload') {
-        sessionStorage.removeItem(MAP_HINT_DISMISSED_KEY);
-    }
-}
-
 clearMapHintOnReload();
 
 function showInitialSpinner() {
@@ -73,23 +48,46 @@ function showModeIntro(mode) {
     const title = document.getElementById('modeIntroTitle');
     const desc = document.getElementById('modeIntroDescription');
     const diff = document.getElementById('modeIntroPointsDifficulty');
+    const back = document.getElementById('modeIntroBack');
+    const play = document.getElementById('modeIntroPlay');
     if (!intro || !title || !desc || !diff) return;
 
     intro.dataset.mode = mode;
+
+    if (back) back.style.display = '';
+    if (play) {
+        play.style.display = '';
+        play.textContent = 'Play';
+    }
 
     if (mode === 'endless') {
         title.textContent = 'Endless mode';
         desc.textContent = 'Play as many rounds as you like. After each guess you\'ll see how far off you were, so you can keep improving your world knowledge.';
         diff.style.display = 'none';
-    } else {
+    } else if (mode === 'points') {
         title.textContent = 'Points mode';
         desc.textContent =
             'Play 10 rounds and try to reach 1000 points.\n' +
             'Points are based on distance (closer = more points) and a speed bonus.\n' +
             'If time runs out, the round ends with 0 points and auto-advances.\n\n' +
             'Normal: 2:00 per round. Speed bonus: 2x (under 30s), 1.5x (under 60s).\n' +
-            'Challenging: 1:00 per round. Reduced distance points. Speed bonus: 1.5x (under 30s).';
+            'Challenging: 1:00 per round. Reduced distance points. Speed bonus: 1.5x (under 30s).\n' +
+            'Hard: 0:30 per round. Very tough distance points. Speed bonus: 2x (under 10s).';
         diff.style.display = 'block';
+    } else {
+        // Help / about screen
+        title.textContent = 'What is Snippit?';
+        desc.textContent =
+            'Snippit is a quick geography guessing game.\n\n' +
+            'You see a zoomed-in mini-map (the “snippit”) and you try to place your guess on the big world map.\n' +
+            'After guessing you\'ll see the distance between your guess and the real location.\n\n' +
+            'Endless mode: keep playing and improve.\n' +
+            'Points mode: 10 rounds, reach 1000 points — accuracy + speed matter.';
+        diff.style.display = 'none';
+
+        // Spec: big Back button instead of Play for this screen.
+        if (back) back.style.display = 'none';
+        if (play) play.textContent = 'Back';
     }
 
     setModeIntroVisible(true);
@@ -107,6 +105,11 @@ function getSelectedPointsDifficulty() {
 
 function startSelectedMode() {
     if (!pendingMode) return;
+
+    if (pendingMode === 'help') {
+        hideModeIntro();
+        return;
+    }
 
     showInitialSpinner();
 
@@ -148,6 +151,7 @@ function wireModeIntro() {
 function wireHomeButtons() {
     const endless = document.getElementById('endlessMode');
     const points = document.getElementById('pointsMode');
+    const help = document.getElementById('homeHelpBtn');
 
     const activate = (el, handler) => {
         if (!el) return;
@@ -163,6 +167,7 @@ function wireHomeButtons() {
     // No loading spinner here: we first show the mode intro screen.
     activate(endless, () => showModeIntro('endless'));
     activate(points, () => showModeIntro('points'));
+    activate(help, () => showModeIntro('help'));
 }
 
 function homeTitleRollOnce() {

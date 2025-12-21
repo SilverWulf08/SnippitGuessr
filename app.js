@@ -19,34 +19,16 @@ const GAME_MODE = (document.body && document.body.dataset && document.body.datas
 const POINTS_ROUNDS_TOTAL = 10;
 const POINTS_GOAL_TOTAL = 1000;
 
-const MAP_HINT_DISMISSED_KEY = 'snippit.mapHintDismissed';
+// Tile sources
+// Main map: CARTO Voyager for English labels + good detail.
+const MAIN_TILE_URL = 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png';
+const MAIN_TILE_ATTRIBUTION = '© OpenStreetMap contributors © CARTO';
+const MAIN_TILE_SUBDOMAINS = 'abcd';
 
-function getNavigationType() {
-    try {
-        const entry = performance.getEntriesByType('navigation')[0];
-        if (entry && entry.type) return entry.type;
-
-        // Fallback for older browsers.
-        // 0 = navigate, 1 = reload, 2 = back_forward, 255 = undefined
-        if (performance && performance.navigation && typeof performance.navigation.type === 'number') {
-            if (performance.navigation.type === 1) return 'reload';
-            if (performance.navigation.type === 2) return 'back_forward';
-            if (performance.navigation.type === 0) return 'navigate';
-        }
-
-        return 'unknown';
-    } catch {
-        return 'unknown';
-    }
-}
-
-function clearMapHintOnReload() {
-    // User wants the hint back only when the tab is refreshed.
-    // sessionStorage survives reload, so we explicitly clear the dismissal flag on reload.
-    if (getNavigationType() === 'reload') {
-        sessionStorage.removeItem(MAP_HINT_DISMISSED_KEY);
-    }
-}
+// Snippit (mini map): OSM Standard.
+const SNIPPIT_TILE_URL = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+const SNIPPIT_TILE_ATTRIBUTION = '© OpenStreetMap contributors';
+const SNIPPIT_TILE_SUBDOMAINS = 'abc';
 
 function getHintToastEls() {
     return {
@@ -89,11 +71,16 @@ function wireMapHintToast() {
 
 function getPointsDifficulty() {
     const v = sessionStorage.getItem('snippit.pointsDifficulty');
-    return v === 'challenging' ? 'challenging' : 'normal';
+    if (v === 'hard') return 'hard';
+    if (v === 'challenging') return 'challenging';
+    return 'normal';
 }
 
 function getPointsRoundTimeLimitMs() {
-    return getPointsDifficulty() === 'challenging' ? (1 * 60 * 1000) : (2 * 60 * 1000);
+    const diff = getPointsDifficulty();
+    if (diff === 'hard') return 30 * 1000;
+    if (diff === 'challenging') return 1 * 60 * 1000;
+    return 2 * 60 * 1000;
 }
 
 let pointsState = null;
@@ -170,10 +157,17 @@ function initGameIfNeeded() {
         maxBoundsViscosity: 1.0
     });
 
-    // Add CartoDB tiles with English labels
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
-        attribution: '© OpenStreetMap contributors © CARTO',
-        maxZoom: 19
+    // Main world map
+    L.tileLayer(MAIN_TILE_URL, {
+        attribution: MAIN_TILE_ATTRIBUTION,
+        subdomains: MAIN_TILE_SUBDOMAINS,
+        maxZoom: 19,
+        detectRetina: true,
+        // Smoother zooming: keep more tiles around and avoid reloading while mid-zoom.
+        keepBuffer: 6,
+        updateWhenIdle: true,
+        updateWhenZooming: false,
+        reuseTiles: true
     }).addTo(map);
 
     // Add click listener
@@ -273,6 +267,17 @@ function startPointsRoundTimer() {
 }
 
 function getBasePointsForDistanceKm(distanceKm, difficulty) {
+    if (difficulty === 'hard') {
+        // Intentionally harsh: reaching 1000 in 10 rounds is difficult but possible with consistent close guesses.
+        if (distanceKm < 2) return 200;
+        if (distanceKm < 10) return 150;
+        if (distanceKm < 50) return 95;
+        if (distanceKm < 200) return 65;
+        if (distanceKm < 500) return 40;
+        if (distanceKm < 1000) return 20;
+        return 10;
+    }
+
     if (difficulty === 'challenging') {
         if (distanceKm < 10) return 170;
         if (distanceKm < 50) return 130;
@@ -292,6 +297,10 @@ function getBasePointsForDistanceKm(distanceKm, difficulty) {
 }
 
 function getSpeedMultiplierForElapsedMs(elapsedMs, difficulty) {
+    if (difficulty === 'hard') {
+        return elapsedMs < 10 * 1000 ? 2 : 1;
+    }
+
     if (difficulty === 'challenging') {
         return elapsedMs < 30 * 1000 ? 1.5 : 1;
     }
@@ -308,6 +317,7 @@ function showPointsSummaryOverlay() {
 
     const scoreEl = document.getElementById('pointsSummaryScore');
     const goalEl = document.getElementById('pointsSummaryGoal');
+    const roundsEl = document.getElementById('pointsSummaryRounds');
     const timeEl = document.getElementById('pointsSummaryTime');
 
     const totalPoints = pointsState ? pointsState.totalPoints : 0;
@@ -316,6 +326,14 @@ function showPointsSummaryOverlay() {
 
     if (scoreEl) scoreEl.textContent = `${totalPoints} pts`;
     if (goalEl) goalEl.textContent = success ? `Goal reached (≥ ${POINTS_GOAL_TOTAL})` : `Goal not reached (${POINTS_GOAL_TOTAL} needed)`;
+    if (roundsEl) {
+        if (success && pointsState) {
+            roundsEl.textContent = `Completed in: ${pointsState.round}/${POINTS_ROUNDS_TOTAL} rounds`;
+            roundsEl.style.display = 'block';
+        } else {
+            roundsEl.style.display = 'none';
+        }
+    }
     if (timeEl) timeEl.textContent = `Total time: ${formatClockMs(totalTimeMs)}`;
 
     overlay.style.display = 'flex';
@@ -638,10 +656,16 @@ function createMiniMap(lat, lng) {
         touchZoom: false
     });
 
-    // Use standard OSM tiles so the snippit has road names + POIs as clues
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '© OpenStreetMap contributors',
-        maxZoom: 19
+    // Snippit tiles (OSM Standard)
+    L.tileLayer(SNIPPIT_TILE_URL, {
+        attribution: SNIPPIT_TILE_ATTRIBUTION,
+        subdomains: SNIPPIT_TILE_SUBDOMAINS,
+        maxZoom: 19,
+        detectRetina: true,
+        keepBuffer: 6,
+        updateWhenIdle: true,
+        updateWhenZooming: false,
+        reuseTiles: true
     }).addTo(miniMap);
 
     // In flex layouts Leaflet can initialize before the container has a final size
@@ -720,6 +744,9 @@ function newRound() {
             endPointsGame();
             return;
         }
+
+        const roundEl = document.getElementById('roundProgress');
+        if (roundEl) roundEl.textContent = `${pointsState.round}/${POINTS_ROUNDS_TOTAL}`;
 
         startPointsRoundTimer();
     }
@@ -887,6 +914,9 @@ function makeGuess() {
 
         const progressEl = document.getElementById('pointsProgress');
         if (progressEl) progressEl.textContent = `${pointsState.totalPoints}/${POINTS_GOAL_TOTAL}`;
+
+        const roundEl = document.getElementById('roundProgress');
+        if (roundEl) roundEl.textContent = `${pointsState.round}/${POINTS_ROUNDS_TOTAL}`;
 
         const multiplierText = multiplier === 1 ? '' : ` (x${multiplier})`;
         message = `${message} +${awarded} points${multiplierText}`;

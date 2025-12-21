@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Snippit</title>
-    <link rel="icon" href="favicon.svg" type="image/svg+xml">
+    <link rel="icon" href="white compass.png" type="image/png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
@@ -28,12 +28,12 @@
 
     <!-- Initial page-load spinner (solid black background + white compass, fades out) -->
     <div id="initialSpinner" class="spinner-overlay spinner-overlay--initial" style="display: flex;" aria-hidden="true">
-        <img class="compass-spinner compass-spinner--white" src="compass.png" alt="Loading" />
+        <img class="compass-spinner" src="white compass.png" alt="Loading" />
     </div>
 
     <!-- Next-round spinner (blurred overlay + black compass) -->
     <div id="roundSpinner" class="spinner-overlay" style="display: none;" aria-hidden="true">
-        <img class="compass-spinner" src="black compass.png" alt="Loading" />
+        <img class="compass-spinner compass-spinner--between-rounds" src="white compass.png" alt="Loading" />
     </div>
 
     <div id="container">
@@ -75,6 +75,7 @@
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="locations.js"></script>
+    <script src="shared.js"></script>
     <script src="app.js"></script>
 </body>
 </html>
