@@ -9,7 +9,7 @@
         "Patch notes now load from patch-notes.json so they can be updated without touching the code.",
         "Updated the \"What is Snippit?\" / Help screen with clearer sections (including an overview of the modes).",
         "Added a shared \"Points info\" popup that explains how points work.",
-        "Merged Points into Classic as a Play style (Classic + Points). The old Points card now shows \"Coming soon…\".",
+        "Merged Points into Classic as a Play style (Classic + Points). The old Points card will now be the card for Reveal mode and now shows \"Coming soon…\".",
         "Home bottom bar polish: patch notes icon support, responsive sizing on resize, and updated the credit-pill confetti effect.",
         "Performance improvements for smoother mobile play (reduced heavy UI updates and tuned map rendering)."
       ]
