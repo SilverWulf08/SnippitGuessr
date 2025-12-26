@@ -1,3 +1,20 @@
+/**
+ * Snippit - Home Screen
+ * =====================
+ * Handles the main home screen UI, mode selection cards, intro overlays,
+ * and navigation to different game modes.
+ * 
+ * Game Modes:
+ * - Classic: Guess the location from a zoomed-in map snippit
+ * - Questions: Answer geography questions by guessing on the map
+ * - Reveal: Start zoomed in and zoom out each round until you find it
+ * 
+ * Play Styles:
+ * - Classic (no timer/points): Play at your own pace
+ * - Points: Timed rounds with scoring based on distance and speed
+ * - Timer (Reveal only): Decreasing time limit per round
+ */
+
 const INITIAL_LOAD_DELAY_MS = 900;
 let initialSpinnerDismissed = false;
 
@@ -238,6 +255,9 @@ function showModeIntro(mode) {
         if (classicScoring) classicScoring.style.display = 'block';
         if (qScoring) qScoring.style.display = 'none';
 
+        const revealScoring = document.getElementById('modeIntroRevealScoring');
+        if (revealScoring) revealScoring.style.display = 'none';
+
         // Default state: Classic (no points)
         const classicRadio = document.querySelector('input[name="classicScoring"][value="classic"]');
         if (classicRadio) classicRadio.checked = true;
@@ -258,6 +278,9 @@ function showModeIntro(mode) {
         diff.style.display = 'none';
         if (qScoring) qScoring.style.display = 'block';
 
+        const revealScoring = document.getElementById('modeIntroRevealScoring');
+        if (revealScoring) revealScoring.style.display = 'none';
+
         // Default state: Classic (no points)
         const classicRadio = document.querySelector('input[name="questionsScoring"][value="classic"]');
         if (classicRadio) classicRadio.checked = true;
@@ -265,16 +288,24 @@ function showModeIntro(mode) {
 
         const normalDiff = document.querySelector('input[name="questionsDifficulty"][value="normal"]');
         if (normalDiff) normalDiff.checked = true;
-    } else if (mode === 'points') {
+    } else if (mode === 'reveal') {
         title.textContent = 'Reveal mode';
-        desc.textContent = 'Coming soon...';
+        desc.textContent =
+            'Start with a very zoomed in snippit and try to guess where it is on the world map.\n\n' +
+            'Each round the snippit zooms out a little more, revealing more of the area.\n' +
+            'You have 10 rounds to guess within 5 km of the target. The earlier you guess, the better!\n\n' +
+            'Choose Classic or Timer play style.';
         if (moreBtn) moreBtn.style.display = 'none';
         if (classicScoring) classicScoring.style.display = 'none';
         diff.style.display = 'none';
         if (qScoring) qScoring.style.display = 'none';
 
-        // Placeholder: keep intro but prevent starting.
-        if (play) play.style.display = 'none';
+        const revealScoring = document.getElementById('modeIntroRevealScoring');
+        if (revealScoring) revealScoring.style.display = 'block';
+
+        // Default state: Classic (no timer)
+        const classicRadio = document.querySelector('input[name="revealScoring"][value="classic"]');
+        if (classicRadio) classicRadio.checked = true;
     } else if (mode === 'help') {
         // Help / about screen
         title.textContent = 'What is Snippit?';
@@ -291,13 +322,17 @@ function showModeIntro(mode) {
                 'Choose Classic or Points play style.\n\n' +
                 'Questions mode: Answer short prompts by guessing the correct spot on the world map.\n' +
                 'Choose Classic or Points play style.\n\n' +
-                'Reveal mode: Coming soon…';
+                'Reveal mode: Start with a very zoomed in snippit and zoom out each round.\n' +
+                'Guess within 5 km in 10 rounds to win. Choose Classic or Timer play style.';
         }
 
         if (moreBtn) moreBtn.style.display = 'none';
         if (classicScoring) classicScoring.style.display = 'none';
         diff.style.display = 'none';
         if (qScoring) qScoring.style.display = 'none';
+
+        const revealScoringHelp = document.getElementById('modeIntroRevealScoring');
+        if (revealScoringHelp) revealScoringHelp.style.display = 'none';
 
         // Spec: big Back button instead of Play for this screen.
         if (back) back.style.display = 'none';
@@ -317,6 +352,9 @@ function showModeIntro(mode) {
         diff.style.display = 'none';
         if (qScoring) qScoring.style.display = 'none';
 
+        const revealScoringPN = document.getElementById('modeIntroRevealScoring');
+        if (revealScoringPN) revealScoringPN.style.display = 'none';
+
         // Use the same "big Back" behavior as the help screen.
         if (back) back.style.display = 'none';
         if (play) play.textContent = 'Back';
@@ -328,6 +366,9 @@ function showModeIntro(mode) {
         if (classicScoring) classicScoring.style.display = 'none';
         diff.style.display = 'none';
         if (qScoring) qScoring.style.display = 'none';
+
+        const revealScoringFB = document.getElementById('modeIntroRevealScoring');
+        if (revealScoringFB) revealScoringFB.style.display = 'none';
     }
 
     setModeIntroVisible(true);
@@ -363,6 +404,11 @@ function getSelectedClassicScoring() {
     return selected ? selected.value : 'classic';
 }
 
+function getSelectedRevealScoring() {
+    const selected = document.querySelector('input[name="revealScoring"]:checked');
+    return selected ? selected.value : 'classic';
+}
+
 function startSelectedMode() {
     if (!pendingMode) return;
 
@@ -371,9 +417,14 @@ function startSelectedMode() {
         return;
     }
 
-    // Placeholder: points card is reserved for future game modes.
-    if (pendingMode === 'points') {
-        hideModeIntro();
+    if (pendingMode === 'reveal') {
+        const revealScoring = getSelectedRevealScoring();
+        sessionStorage.setItem('snippit.startMode', 'reveal');
+        sessionStorage.setItem('snippit.revealPlayStyle', revealScoring);
+        showInitialSpinner();
+        setTimeout(() => {
+            window.location.href = 'reveal.html';
+        }, 80);
         return;
     }
 
@@ -591,7 +642,7 @@ function wireHomeButtons() {
         const modeById = {
             questionsMode: 'questions',
             classicMode: 'classic',
-            revealMode: 'points'
+            revealMode: 'reveal'
         };
 
         // Default: Classic mode is front-and-center.

@@ -1,3 +1,18 @@
+/**
+ * Snippit - Questions Database
+ * =============================
+ * Contains trivia questions for Questions mode.
+ * Each question has a prompt, correct answer location, and fun fact.
+ * 
+ * Question Structure:
+ * - question: The trivia prompt shown to the player
+ * - answer: The correct answer (city/location name)
+ * - fact: An interesting fact displayed after the round
+ * - lat/lng: Coordinates of the correct location
+ * 
+ * Used by: app.js (Questions mode)
+ */
+
 // Questions mode dataset
 // Each item is a prompt + the real-world location (lat/lng) that answers it.
 // Keep this file similar to locations.js: a single global array.

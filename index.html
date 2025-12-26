@@ -8,7 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css?v=20251224_3" />
+    <link rel="stylesheet" href="styles.css?v=20251226_1" />
 </head>
 <body>
     <!-- Initial page-load spinner (solid black background + white compass, fades out) -->
@@ -35,7 +35,7 @@
                 </div>
                 <div id="revealMode" class="home-mode home-mode--red" role="button" tabindex="0" aria-label="Reveal mode">
                     <span class="home-mode__label">Reveal mode</span>
-                    <span class="home-mode__description">Coming soon…</span>
+                    <span class="home-mode__description">Start with a tiny snippit and zoom out each round until you find it.</span>
                 </div>
             </div>
         </div>
@@ -159,6 +159,20 @@
                 </div>
             </div>
 
+            <div id="modeIntroRevealScoring" class="mode-intro__difficulty" style="display:none;" aria-label="Reveal play style">
+                <div class="mode-intro__difficulty-title">Play style</div>
+                <div class="mode-intro__difficulty-options" role="radiogroup" aria-label="Select play style">
+                    <label class="mode-chip">
+                        <input type="radio" name="revealScoring" value="classic" checked />
+                        <span>Classic</span>
+                    </label>
+                    <label class="mode-chip">
+                        <input type="radio" name="revealScoring" value="timer" />
+                        <span>Timer</span>
+                    </label>
+                </div>
+            </div>
+
             <button id="modeIntroPlay" class="mode-intro__play" type="button">Play</button>
         </div>
 
@@ -172,6 +186,6 @@
     </div>
 
     <script src="shared.js?v=20251222_2"></script>
-    <script src="home.js?v=20251224_4"></script>
+    <script src="home.js?v=20251226_1"></script>
 </body>
 </html>

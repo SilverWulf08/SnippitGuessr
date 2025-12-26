@@ -1,3 +1,19 @@
+/**
+ * Snippit - Classic & Questions Mode Game Logic
+ * ==============================================
+ * This file handles the main game logic for:
+ * - Classic mode (game.html): Guess location from a zoomed-in map snippit
+ * - Classic mode with Points (points.html): Same but with timed rounds and scoring
+ * - Questions mode (questions.html): Answer questions by guessing on the map
+ * 
+ * The mode is determined by the data-mode attribute on the body element:
+ * - 'classic' or undefined: Classic mode (no points)
+ * - 'points': Classic mode with Points play style
+ * - 'questions': Questions mode (can also use points scoring)
+ * 
+ * For Reveal mode, see reveal.js
+ */
+
 let map;
 let miniMap;
 let actualLocation;
@@ -627,18 +643,35 @@ function showPointsSummaryOverlay() {
     const overlay = document.getElementById('pointsSummaryOverlay');
     if (!overlay) return;
 
+    const setSpinnerButtonLabel = (btn, label) => {
+        if (!btn) return;
+        const icon = btn.querySelector('.retry-icon');
+        btn.textContent = '';
+        if (icon) btn.appendChild(icon);
+        btn.append(` ${label}`);
+    };
+
     const crownEl = document.getElementById('pointsSummaryCrown');
 
     const totalPoints = pointsState ? pointsState.totalPoints : 0;
     const totalTimeMs = pointsState ? pointsState.totalTimeMs : 0;
     const success = totalPoints >= POINTS_GOAL_TOTAL;
     const gameOver = !!(pointsState && pointsState.gameOver);
+    const isExpert = !!(pointsState && pointsState.difficulty === 'expert');
 
     const titleEl = document.getElementById('pointsSummaryTitle');
     if (titleEl) {
-        titleEl.textContent = gameOver
-            ? 'Game Over'
-            : (isQuestionsMode() ? 'Questions (Points)' : 'Classic (Points)');
+        if (gameOver) {
+            titleEl.textContent = '😔 Game Over';
+        } else if (success) {
+            if (isExpert) {
+                titleEl.textContent = '👑 Expert Victory!';
+            } else {
+                titleEl.textContent = '🎉 Goal Reached!';
+            }
+        } else {
+            titleEl.textContent = isQuestionsMode() ? 'Questions (Points)' : 'Classic (Points)';
+        }
     }
 
     const scoreEl = document.getElementById('pointsSummaryScore');
@@ -650,7 +683,7 @@ function showPointsSummaryOverlay() {
     if (scoreEl) scoreEl.textContent = `${totalPoints} pts`;
     if (goalEl) {
         goalEl.textContent = gameOver
-            ? 'Game over (a guess was over 1000 km away)'
+            ? 'A guess was over 1000 km away'
             : (success ? `Goal reached (≥ ${POINTS_GOAL_TOTAL})` : `Goal not reached (${POINTS_GOAL_TOTAL} needed)`);
     }
     if (difficultyEl) {
@@ -667,12 +700,16 @@ function showPointsSummaryOverlay() {
     }
     if (timeEl) timeEl.textContent = `Total time: ${formatClockMs(totalTimeMs)}`;
 
+    // Retry button label: Retry on loss, Play again on success
+    const retryBtn = document.getElementById('pointsRetryBtn');
+    setSpinnerButtonLabel(retryBtn, success ? 'Play again' : 'Retry');
+
     overlay.style.display = 'flex';
     overlay.setAttribute('aria-hidden', 'false');
 
+    // Hide the SVG crown - we now use emojis in the title
     if (crownEl) {
-        crownEl.style.display = success ? 'block' : 'none';
-        crownEl.classList.toggle('is-expert', !!(success && pointsState && pointsState.difficulty === 'expert'));
+        crownEl.style.display = 'none';
     }
 
     if (success) {

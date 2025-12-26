@@ -98,6 +98,15 @@ body {
     #f5c938;
 }
 
+.mode-intro[data-mode="reveal"] {
+    /* Green with a diagonal black gradient overlay (same green as the Guess button) */
+    background:
+    /* Smooth diagonal shadow that originates in the bottom-right corner */
+    linear-gradient(to top left, rgba(0, 0, 0, 0.72) 0%, rgba(0, 0, 0, 0.30) 32%, rgba(0, 0, 0, 0.0) 72%),
+        linear-gradient(rgba(0, 0, 0, 0.62), rgba(0, 0, 0, 0.62)),
+    #4CAF50;
+}
+
 .mode-intro__panel {
     width: min(720px, calc(100% - 24px));
     border-radius: var(--radius);
@@ -106,7 +115,7 @@ body {
     backdrop-filter: blur(12px);
     box-shadow: var(--shadow);
     padding: 18px;
-    max-height: calc(100vh - 24px);
+    max-height: calc(100vh - 70px);
     overflow: hidden;
     display: flex;
     flex-direction: column;
@@ -306,8 +315,17 @@ body {
     accent-color: #4CAF50;
 }
 
+/* Mode-specific accent colors for radio buttons */
+.mode-intro[data-mode="classic"] .mode-chip input {
+    accent-color: rgba(255, 255, 255, 0.92);
+}
+
 .mode-intro[data-mode="questions"] .mode-chip input {
     accent-color: #f5c938;
+}
+
+.mode-intro[data-mode="reveal"] .mode-chip input {
+    accent-color: #4CAF50;
 }
 
 .mode-chip span {
@@ -1249,6 +1267,25 @@ body {
     text-align: center;
 }
 
+/* Reveal mode: round indicator badge (top-right, below timer if present) */
+.reveal-round-indicator {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    background: rgba(0, 0, 0, 0.55);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(8px);
+    padding: 6px 12px;
+    border-radius: 999px;
+    z-index: 1000;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    pointer-events: none;
+    text-align: center;
+    color: rgba(255, 255, 255, 0.9);
+}
+
 #map {
     width: 400px;
     height: 100%;
@@ -1762,6 +1799,13 @@ body[data-mode="questions"].is-points-scoring .points-stats-row {
     font-size: 34px;
     font-weight: 800;
     color: #fff;
+}
+
+.points-summary-location {
+    font-size: 14px;
+    color: var(--text-muted);
+    margin-top: 4px;
+    font-style: italic;
 }
 
 .points-summary-actions {

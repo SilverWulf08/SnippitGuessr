@@ -1,5 +1,11 @@
-// Shared helpers used across pages (home + game).
+/**
+ * Snippit - Shared Utilities
+ * ==========================
+ * Common helpers and constants used across all pages (home screen and game modes).
+ * This file should be loaded before any other Snippit JavaScript files.
+ */
 
+// Session storage keys for UI state
 const MAP_HINT_DISMISSED_KEY = 'snippit.mapHintDismissed';
 const MAP_HINT_POP_SHOWN_KEY = 'snippit.mapHintPopShown';
 

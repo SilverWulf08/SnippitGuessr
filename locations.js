@@ -1,3 +1,17 @@
+/**
+ * Snippit - Location Database
+ * ============================
+ * Contains all geographic locations used in Classic and Reveal modes.
+ * Each location has latitude, longitude, and display name.
+ * 
+ * Categories:
+ * - Major Cities (Easy): Paris, London, Tokyo, etc.
+ * - Medium Cities: Berlin, Amsterdam, Barcelona, etc.
+ * - And many more diverse locations worldwide
+ * 
+ * Used by: app.js (Classic mode), reveal.js (Reveal mode)
+ */
+
 // Extensive location database with cities, towns, and remote places
 const locations = [
     // Major Cities - Easy

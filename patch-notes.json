@@ -2,6 +2,22 @@
   "intro": "Patch notes for Snippit. Latest changes are at the top. (these patch notes and versions start at the release of the patch notes system)",
   "versions": [
     {
+      "version": "0.2.0",
+      "date": "2025-12-26",
+      "notes": [
+        "Added Reveal mode: start with a very zoomed-in snippit and zoom out each round until you guess the location.",
+        "Reveal mode supports Classic and Timer play styles, with a 5km win condition and 10 rounds.",
+        "Intro overlays for all modes now have colored backgrounds and improved visual polish.",
+        "Summary overlays now use emojis for win/game over/expert, and SVG crowns are replaced with emoji.",
+        "Reveal mode summary popup now includes a Back button.",
+        "Reveal mode: after closing the summary, the Guess button becomes a Show summary button so you can reopen the popup.",
+        "UI: Retry buttons now read \"Retry\" on losses and \"Play again\" on wins (keeping the spinning icon).",
+        "Bugfix: Reveal mode no longer shows the actual location during guessing rounds (only on win/game over).",
+        "Bugfix: Reveal mode now starts more zoomed in for extra challenge.",
+        "UI: Various small layout and accessibility improvements."
+      ]
+    },
+    {
       "version": "0.1.0",
       "date": "2025-12-26",
       "notes": [
