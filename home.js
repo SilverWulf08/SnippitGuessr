@@ -341,6 +341,12 @@ function showModeIntro(mode) {
         title.textContent = 'Patch Notes';
         desc.textContent = '';
 
+        // Always reset scroll to top when opening/reopening Patch Notes.
+        const contentEl = document.getElementById('modeIntroContent');
+        if (contentEl) contentEl.scrollTop = 0;
+        const listEl = document.getElementById('patchNotesList');
+        if (listEl) listEl.scrollTop = 0;
+
         if (patchNotes) patchNotes.style.display = 'block';
         setPatchNotesLoading(true);
         loadPatchNotes()

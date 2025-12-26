@@ -915,7 +915,7 @@ body {
         filter 180ms ease,
         box-shadow 240ms ease;
 
-    background: rgba(18, 18, 18, 0.72);
+    background: var(--surface);
     border: 1px solid rgba(255, 255, 255, 0.10);
     box-shadow: var(--shadow-sm);
     touch-action: pan-y;

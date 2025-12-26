@@ -2,6 +2,14 @@
   "intro": "Patch notes for Snippit. Latest changes are at the top. (these patch notes and versions start at the release of the patch notes system)",
   "versions": [
     {
+      "version": "0.2.1",
+      "date": "2025-12-26",
+      "notes": [
+        "Home screen: game mode cards are now fully opaque (no transparency).",
+        "Patch Notes: opening the Patch Notes screen now always scrolls to the top."
+      ]
+    },
+    {
       "version": "0.2.0",
       "date": "2025-12-26",
       "notes": [
