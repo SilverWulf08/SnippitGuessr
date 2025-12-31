@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Snippit - Questions Database
  * =============================
  * Contains trivia questions for Questions mode.
@@ -1131,5 +1131,286 @@ const questions = [
         fact: 'Reykjavík is often described as the world’s northernmost capital city of a sovereign state.',
         lat: 64.1466,
         lng: -21.9426
+    }
+,
+    {
+        question: 'Where did the Wright Brothers open their bicycle shop?',
+        answer: 'Dayton, Ohio, USA',
+        fact: 'The Wright Brothers used profits from their bicycle business to fund their aviation experiments.',
+        lat: 39.7589,
+        lng: -84.1916
+    },
+    {
+        question: 'Where was the first atomic bomb test conducted?',
+        answer: 'Alamogordo, New Mexico, USA',
+        fact: 'The Trinity test site near Alamogordo was where the first nuclear device was detonated in July 1945.',
+        lat: 32.8995,
+        lng: -105.9603
+    },
+    {
+        question: 'Where is Angkor Wat located?',
+        answer: 'Siem Reap, Cambodia',
+        fact: 'Angkor Wat is the largest religious monument in the world, originally built as a Hindu temple in the 12th century.',
+        lat: 13.4125,
+        lng: 103.8670
+    },
+    {
+        question: 'Where did the Titanic set sail from on its maiden voyage?',
+        answer: 'Southampton, England',
+        fact: 'The Titanic departed Southampton on April 10, 1912, and sank just five days later.',
+        lat: 50.9097,
+        lng: -1.4044
+    },
+    {
+        question: 'Where is the historic city of Timbuktu located?',
+        answer: 'Timbuktu, Mali',
+        fact: 'Timbuktu was a major center of Islamic learning and trade in the 15th and 16th centuries.',
+        lat: 16.7666,
+        lng: -3.0026
+    },
+    {
+        question: 'Where was Mozart born?',
+        answer: 'Salzburg, Austria',
+        fact: 'Wolfgang Amadeus Mozart was born in Salzburg in 1756 and composed over 600 works in his short life.',
+        lat: 47.8095,
+        lng: 13.0550
+    },
+    {
+        question: 'Where is the Hermitage Museum located?',
+        answer: 'St. Petersburg, Russia',
+        fact: "The Hermitage is one of the world's largest and oldest museums, founded in 1764 by Catherine the Great.",
+        lat: 59.9399,
+        lng: 30.3146
+    },
+    {
+        question: 'Where did Captain Cook first land in Australia?',
+        answer: 'Botany Bay, Australia',
+        fact: 'Captain James Cook landed at Botany Bay in 1770, marking the beginning of British interest in Australia.',
+        lat: -34.0097,
+        lng: 151.1969
+    },
+    {
+        question: 'Where is the Alhambra palace located?',
+        answer: 'Granada, Spain',
+        fact: 'The Alhambra is a stunning example of Moorish architecture built during the 13th and 14th centuries.',
+        lat: 37.1760,
+        lng: -3.5881
+    },
+    {
+        question: 'Where was Frida Kahlo born?',
+        answer: 'Coyoacán, Mexico City, Mexico',
+        fact: 'Frida Kahlo was born in 1907 in Coyoacán, now part of Mexico City. Her childhood home is now a museum.',
+        lat: 19.3550,
+        lng: -99.1622
+    },
+    {
+        question: 'Where is Mount Kilimanjaro located?',
+        answer: 'Tanzania',
+        fact: "Kilimanjaro is Africa's highest peak at 5,895 meters and is actually a dormant volcano.",
+        lat: -3.0674,
+        lng: 37.3556
+    },
+    {
+        question: 'Where did Marco Polo begin his journey to China?',
+        answer: 'Venice, Italy',
+        fact: 'Marco Polo departed Venice in 1271 and spent 24 years traveling through Asia.',
+        lat: 45.4408,
+        lng: 12.3155
+    },
+    {
+        question: 'Where was the first Starbucks opened?',
+        answer: 'Seattle, Washington, USA',
+        fact: 'The first Starbucks opened in Pike Place Market in Seattle in 1971.',
+        lat: 47.6097,
+        lng: -122.3331
+    },
+    {
+        question: "Where is Dracula's Castle (Bran Castle) located?",
+        answer: 'Bran, Romania',
+        fact: 'Bran Castle is often associated with the Dracula legend, though Vlad the Impaler likely never lived there.',
+        lat: 45.5150,
+        lng: 25.3672
+    },
+    {
+        question: 'Where was Leonardo da Vinci born?',
+        answer: 'Vinci, Italy',
+        fact: 'Leonardo was born in the small town of Vinci in 1452, near Florence.',
+        lat: 43.7814,
+        lng: 10.9234
+    },
+    {
+        question: 'Where is the ancient city of Babylon located?',
+        answer: 'Near Baghdad, Iraq',
+        fact: 'Babylon was one of the most important cities in ancient Mesopotamia, famous for its Hanging Gardens.',
+        lat: 32.5355,
+        lng: 44.4275
+    },
+    {
+        question: 'Where did the D-Day landings take place?',
+        answer: 'Normandy, France',
+        fact: 'The Allied invasion of Normandy on June 6, 1944, was the largest amphibious assault in history.',
+        lat: 49.3963,
+        lng: -0.8956
+    },
+    {
+        question: 'Where is Victoria Falls located?',
+        answer: 'Zambia/Zimbabwe border',
+        fact: "Victoria Falls is one of the world's largest waterfalls, spanning the border between Zambia and Zimbabwe.",
+        lat: -17.9243,
+        lng: 25.8572
+    },
+    {
+        question: 'Where was Pablo Picasso born?',
+        answer: 'Málaga, Spain',
+        fact: 'Picasso was born in Málaga in 1881 and went on to co-found the Cubist movement.',
+        lat: 36.7213,
+        lng: -4.4214
+    },
+    {
+        question: 'Where is the headquarters of the United Nations located?',
+        answer: 'New York City, USA',
+        fact: "The UN headquarters in Manhattan has been the organization's home since 1952.",
+        lat: 40.7489,
+        lng: -73.9680
+    },
+    {
+        question: 'Where did the Boston Marathon bombing occur?',
+        answer: 'Boston, Massachusetts, USA',
+        fact: 'The 2013 Boston Marathon bombing occurred near the finish line on Boylston Street.',
+        lat: 42.3490,
+        lng: -71.0813
+    },
+    {
+        question: 'Where is the Louvre Museum located?',
+        answer: 'Paris, France',
+        fact: "The Louvre is the world's largest art museum and home to the Mona Lisa.",
+        lat: 48.8606,
+        lng: 2.3376
+    },
+    {
+        question: 'Where did the Chernobyl disaster occur?',
+        answer: 'Pripyat, Ukraine',
+        fact: 'The Chernobyl nuclear disaster in 1986 remains the worst nuclear accident in history.',
+        lat: 51.2763,
+        lng: 30.2218
+    },
+    {
+        question: 'Where is Buckingham Palace located?',
+        answer: 'London, United Kingdom',
+        fact: 'Buckingham Palace has served as the official London residence of British monarchs since 1837.',
+        lat: 51.5014,
+        lng: -0.1419
+    },
+    {
+        question: "Where was the first McDonald's opened?",
+        answer: 'San Bernardino, California, USA',
+        fact: "The first McDonald's restaurant was opened by the McDonald brothers in 1940.",
+        lat: 34.1083,
+        lng: -117.2898
+    },
+    {
+        question: 'Where is the Grand Canyon located?',
+        answer: 'Arizona, USA',
+        fact: 'The Grand Canyon is 277 miles long and up to 18 miles wide, carved by the Colorado River.',
+        lat: 36.0544,
+        lng: -112.1401
+    },
+    {
+        question: 'Where did the Fukushima nuclear disaster occur?',
+        answer: 'Fukushima, Japan',
+        fact: 'The 2011 Fukushima disaster was triggered by a massive earthquake and tsunami.',
+        lat: 37.4211,
+        lng: 141.0329
+    },
+    {
+        question: 'Where is Neuschwanstein Castle located?',
+        answer: 'Bavaria, Germany',
+        fact: "This 19th-century castle inspired Disney's Sleeping Beauty Castle.",
+        lat: 47.5576,
+        lng: 10.7498
+    },
+    {
+        question: 'Where did the Black Death (bubonic plague) first arrive in Europe?',
+        answer: 'Sicily, Italy',
+        fact: 'The plague arrived in Messina, Sicily, in 1347 aboard merchant ships from the Black Sea.',
+        lat: 38.1937,
+        lng: 15.5542
+    },
+    {
+        question: 'Where is the Acropolis located?',
+        answer: 'Athens, Greece',
+        fact: 'The Acropolis is an ancient citadel containing the remains of several historically significant buildings, including the Parthenon.',
+        lat: 37.9715,
+        lng: 23.7266
+    },
+    {
+        question: 'Where was Jane Austen born?',
+        answer: 'Steventon, England',
+        fact: 'Jane Austen was born in 1775 in the village of Steventon, Hampshire.',
+        lat: 51.1833,
+        lng: -1.0833
+    },
+    {
+        question: 'Where is the Panama Canal located?',
+        answer: 'Panama',
+        fact: 'The Panama Canal connects the Atlantic and Pacific oceans and was completed in 1914.',
+        lat: 9.0801,
+        lng: -79.6800
+    },
+    {
+        question: 'Where did the Salem Witch Trials take place?',
+        answer: 'Salem, Massachusetts, USA',
+        fact: 'The Salem Witch Trials of 1692-1693 resulted in the execution of 20 people.',
+        lat: 42.5195,
+        lng: -70.8967
+    },
+    {
+        question: 'Where is Table Mountain located?',
+        answer: 'Cape Town, South Africa',
+        fact: 'Table Mountain is a flat-topped mountain that overlooks Cape Town and is over 600 million years old.',
+        lat: -33.9628,
+        lng: 18.4098
+    },
+    {
+        question: 'Where was William Shakespeare born?',
+        answer: 'Stratford-upon-Avon, England',
+        fact: 'Shakespeare was born in Stratford-upon-Avon in 1564 and wrote 37 plays and 154 sonnets.',
+        lat: 52.1917,
+        lng: -1.7081
+    },
+    {
+        question: 'Where is the Space Needle located?',
+        answer: 'Seattle, Washington, USA',
+        fact: "The Space Needle was built for the 1962 World's Fair and stands 605 feet tall.",
+        lat: 47.6205,
+        lng: -122.3493
+    },
+    {
+        question: 'Where did the Hindenburg disaster occur?',
+        answer: 'Lakehurst, New Jersey, USA',
+        fact: 'The German airship Hindenburg caught fire while attempting to dock in 1937, killing 36 people.',
+        lat: 40.0333,
+        lng: -74.3167
+    },
+    {
+        question: 'Where is Checkpoint Charlie located?',
+        answer: 'Berlin, Germany',
+        fact: 'Checkpoint Charlie was the most famous crossing point between East and West Berlin during the Cold War.',
+        lat: 52.5075,
+        lng: 13.3903
+    },
+    {
+        question: 'Where did the Wounded Knee Massacre occur?',
+        answer: 'South Dakota, USA',
+        fact: 'The Wounded Knee Massacre in 1890 was the last major armed conflict between the U.S. and Native Americans.',
+        lat: 43.1391,
+        lng: -102.3680
+    },
+    {
+        question: 'Where is the Golden Gate Bridge located?',
+        answer: 'San Francisco, California, USA',
+        fact: 'The Golden Gate Bridge was completed in 1937 and spans the Golden Gate strait.',
+        lat: 37.8199,
+        lng: -122.4783
     }
 ];

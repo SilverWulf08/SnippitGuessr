@@ -105,6 +105,15 @@ body {
     #4CAF50;
 }
 
+.mode-intro[data-mode="radar"] {
+    /* Cobalt blue with a diagonal black gradient overlay */
+    background:
+    /* Smooth diagonal shadow that originates in the bottom-right corner */
+    linear-gradient(to top left, rgba(0, 0, 0, 0.72) 0%, rgba(0, 0, 0, 0.30) 32%, rgba(0, 0, 0, 0.0) 72%),
+        linear-gradient(rgba(0, 0, 0, 0.62), rgba(0, 0, 0, 0.62)),
+    #0047AB;
+}
+
 .mode-intro__panel {
     width: min(720px, calc(100% - 24px));
     border-radius: var(--radius);
@@ -332,6 +341,10 @@ body {
     --intro-check-accent: #4CAF50;
 }
 
+.mode-intro[data-mode="radar"] {
+    --intro-check-accent: #0047AB;
+}
+
 .mode-intro .mode-chip input[type="radio"],
 .mode-intro .mode-chip input[type="checkbox"] {
     -webkit-appearance: none;
@@ -396,6 +409,10 @@ body {
 
 .difficulty-slider[data-color="questions"] {
     --slider-color: #f5c938;
+}
+
+.difficulty-slider[data-color="radar"] {
+    --slider-color: #0047AB;
 }
 
 .difficulty-slider__radio {
@@ -1028,6 +1045,17 @@ body {
     z-index: 2;
 }
 
+.home-deck .home-mode[data-deck-pos="2"],
+.home-deck .home-mode[data-deck-pos="-2"] {
+    --deck-x: 0px;
+    --deck-y: 20px;
+    --deck-z: -40px;
+    --deck-ry: 0deg;
+    --deck-s: 0.84;
+    --deck-opacity: 0.7;
+    z-index: 1;
+}
+
 .home-mode__label {
     position: relative;
     z-index: 1;
@@ -1090,6 +1118,11 @@ body {
 .home-mode--yellow {
     /* Questions mode: same yellow as the km distance indicator */
     --home-accent: #f5c938;
+}
+
+.home-mode--cobalt {
+    /* Radar mode: cobalt blue */
+    --home-accent: #0047AB;
 }
 
 .home-deck .home-mode {
@@ -1192,37 +1225,138 @@ body {
     }
 }
 
-/* Narrow windows: switch to a vertical deck so side cards stay clickable and never drift off-screen. */
-@media (max-width: 520px) {
+/* Narrow windows: stacked deck with cards peeking from left edge. */
+@media (max-width: 720px) {
     .home-deck {
         top: calc(96px + env(safe-area-inset-top));
         bottom: calc(86px + env(safe-area-inset-bottom));
         --home-card-h: min(380px, calc(100% - 44px));
         --home-card-w: min(300px, calc(100vw - 56px), calc(var(--home-card-h) * 5 / 7));
-        --home-vertical-spread: min(132px, calc(var(--home-card-h) * 0.28));
+        /* How far each stacked card peeks out to the left */
+        --home-stack-peek: 42px;
+        /* Offset is set equal to peek to center the fanned deck */
+        --home-stack-offset: var(--home-stack-peek);
+        perspective: 1200px;
+        perspective-origin: 50% 50%;
+    }
+
+    /* Front card (position 0) - fully visible, slightly offset to the right */
+    .home-deck .home-mode[data-deck-pos="0"] {
+        --deck-x: var(--home-stack-offset);
+        --deck-y: 0px;
+        --deck-z: 60px;
+        --deck-ry: 0deg;
+        --deck-s: 1;
+        --deck-opacity: 1;
+        z-index: 10;
+    }
+
+    /* Card behind (position -1) - peeks from the left */
+    .home-deck .home-mode[data-deck-pos="-1"] {
+        --deck-x: calc(var(--home-stack-offset) - var(--home-stack-peek));
+        --deck-y: 0px;
+        --deck-z: 30px;
+        --deck-ry: 0deg;
+        --deck-s: 0.97;
+        --deck-opacity: 1;
+        z-index: 9;
+    }
+
+    /* Card at the back (position 1) - peeks further left */
+    .home-deck .home-mode[data-deck-pos="1"] {
+        --deck-x: calc(var(--home-stack-offset) - var(--home-stack-peek) * 2);
+        --deck-y: 0px;
+        --deck-z: 0px;
+        --deck-ry: 0deg;
+        --deck-s: 0.94;
+        --deck-opacity: 1;
+        z-index: 8;
+    }
+
+    /* 4th card (position 2 or -2) - furthest back in the stack */
+    .home-deck .home-mode[data-deck-pos="2"],
+    .home-deck .home-mode[data-deck-pos="-2"] {
+        --deck-x: calc(var(--home-stack-offset) - var(--home-stack-peek) * 3);
+        --deck-y: 0px;
+        --deck-z: -30px;
+        --deck-ry: 0deg;
+        --deck-s: 0.91;
+        --deck-opacity: 1;
+        z-index: 7;
+    }
+
+    /* Transition for the stacked deck flip animation */
+    .home-deck .home-mode {
+        transition:
+            transform 420ms cubic-bezier(0.4, 0.0, 0.2, 1),
+            opacity 280ms ease,
+            filter 180ms ease,
+            box-shadow 240ms ease;
+    }
+
+    /* During the flip animation, the card moving to back gets extra styling */
+    .home-deck .home-mode.is-flipping-to-back {
+        --deck-x: calc(var(--home-stack-offset) - 60px);
+        --deck-z: -20px;
+        --deck-ry: -25deg;
+        --deck-s: 0.88;
+        --deck-opacity: 0.7;
+        z-index: 20;
+        transition:
+            transform 220ms cubic-bezier(0.4, 0.0, 0.6, 1),
+            opacity 220ms ease;
+    }
+
+    .home-deck .home-mode.is-flipping-to-front {
+        --deck-x: calc(var(--home-stack-offset) + 30px);
+        --deck-z: 80px;
+        --deck-ry: 8deg;
+        --deck-s: 1.02;
+        z-index: 15;
+        transition:
+            transform 220ms cubic-bezier(0.0, 0.0, 0.2, 1),
+            opacity 220ms ease;
+    }
+
+    /* Subtle shadow layering for depth */
+    .home-deck .home-mode[data-deck-pos="0"] {
+        box-shadow: 
+            0 20px 50px rgba(0, 0, 0, 0.5),
+            0 8px 20px rgba(0, 0, 0, 0.3);
     }
 
     .home-deck .home-mode[data-deck-pos="-1"] {
-        --deck-x: 0px;
-        --deck-y: calc(-1 * var(--home-vertical-spread));
-        --deck-ry: 0deg;
-        --deck-s: 0.92;
+        box-shadow: 
+            0 14px 36px rgba(0, 0, 0, 0.45),
+            0 6px 14px rgba(0, 0, 0, 0.25);
     }
 
     .home-deck .home-mode[data-deck-pos="1"] {
-        --deck-x: 0px;
-        --deck-y: var(--home-vertical-spread);
-        --deck-ry: 0deg;
-        --deck-s: 0.92;
+        box-shadow: 
+            0 10px 28px rgba(0, 0, 0, 0.4),
+            0 4px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Hover effects for stacked cards */
+    .home-deck .home-mode[data-deck-pos="0"]:hover {
+        --hover-lift: -6px;
+        --hover-rx: 4deg;
+    }
+
+    .home-deck .home-mode[data-deck-pos="-1"]:hover,
+    .home-deck .home-mode[data-deck-pos="1"]:hover {
+        filter: brightness(1.08);
+        --hover-lift: -3px;
     }
 }
 
-/* Narrow + short windows: tighten the vertical stack so it never collides with the title/footer. */
-@media (max-width: 520px) and (max-height: 640px) {
+/* Narrow + short windows: tighten the stacked deck. */
+@media (max-width: 720px) and (max-height: 640px) {
     .home-deck {
         --home-card-h: min(320px, calc(100% - 44px));
         --home-card-w: min(280px, calc(100vw - 56px), calc(var(--home-card-h) * 5 / 7));
-        --home-vertical-spread: min(96px, calc(var(--home-card-h) * 0.22));
+        --home-stack-peek: 38px;
+        --home-stack-offset: var(--home-stack-peek);
     }
 }
 
@@ -1323,6 +1457,89 @@ body {
     }
 }
 
+/* Radar mode: radar chart panel replaces the snippit minimap */
+.radar-panel {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 18px;
+}
+
+.radar-panel__card {
+    width: min(420px, 100%);
+    max-width: calc(100vw - 36px);
+    border-radius: var(--radius);
+    background: rgba(18, 18, 18, 0.72);
+    border: 1px solid rgba(255, 255, 255, 0.10);
+    backdrop-filter: blur(12px);
+    box-shadow: var(--shadow);
+    padding: 18px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.radar-panel__kicker {
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 0.28px;
+    color: rgba(255, 255, 255, 0.78);
+    text-transform: uppercase;
+    margin-bottom: 12px;
+}
+
+.radar-panel__canvas {
+    max-width: 100%;
+    height: auto;
+}
+
+.radar-panel__legend {
+    margin-top: 16px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px 16px;
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.75);
+}
+
+.radar-legend-item {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.radar-legend-arrow {
+    color: rgba(0, 71, 171, 0.9);
+    font-weight: 700;
+}
+
+@media (max-width: 768px) {
+    .radar-panel {
+        padding: 12px;
+    }
+
+    .radar-panel__card {
+        width: 100%;
+        max-width: calc(100vw - 24px);
+        padding: 12px;
+    }
+
+    .radar-panel__kicker {
+        font-size: 11px;
+        margin-bottom: 8px;
+    }
+
+    .radar-panel__legend {
+        font-size: 10px;
+        gap: 6px 12px;
+        margin-top: 12px;
+    }
+}
+
 /* Points mode: round timer badge (top-center of Snippit) */
 .points-timer {
     position: absolute;
@@ -1341,6 +1558,14 @@ body {
     pointer-events: none;
     min-width: 72px;
     text-align: center;
+}
+
+/* Radar mode: timer in top-right corner (aligned with home button on left) */
+[data-mode="radar"] .points-timer {
+    top: 14px;
+    right: 14px;
+    left: auto;
+    transform: none;
 }
 
 /* Reveal mode: show round inside the result popup instead of a floating badge */

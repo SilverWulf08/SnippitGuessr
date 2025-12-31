@@ -2,6 +2,32 @@
   "intro": "Patch notes for Snippit. Latest changes are at the top. (these patch notes and versions start at the release of the patch notes system)",
   "versions": [
     {
+      "version": "0.3.0",
+      "date": "2025-12-31",
+      "notes": [
+        "New game mode: Radar mode! Analyze a radar chart showing location characteristics (climate, elevation, coastal proximity, latitude, urban density, rainfall, and remoteness) to pinpoint where in the world the location is.",
+        "Radar mode features 120 unique locations and supports both Classic (untimed) and Points (timed with scoring) play styles.",
+        "Radar mode uses a new cobalt blue theme color for its card, intro screen, and radar chart visualization.",
+        "Radar chart now displays smooth curved lines with adaptive corner rounding instead of straight lines or forced curves.",
+        "Questions mode expanded from 159 to 200 trivia questions covering world geography, history, and culture.",
+        "Points modes: Result popup now shows a cleaner counter format: 'Round X/10 • Y/1000 pts' displayed below the guess location.",
+        "Reveal mode: Round counter now uses the same styling as Points modes for visual consistency.",
+        "Removed old counter displays from result popups in favor of the new unified counter style.",
+        "Home screen now supports 4 game mode cards in the fanned deck layout."
+      ]
+    },
+    {
+      "version": "0.2.4",
+      "date": "2025-12-31",
+      "notes": [
+        "Home screen: Game mode cards now use a fanned/stacked deck layout on windows up to 720px wide, with cards peeking out from the left side for easier access and better visibility.",
+        "The peeking cards now show more of their surface, including their colored corner dots, making them easier to click.",
+        "The fanned deck is always centered and dynamically adjusts to fit all cards within the home deck area, so adding new game modes will automatically keep the layout balanced.",
+        "Swiping and clicking on cards now animates a smooth flip/rearrange effect in the stacked layout.",
+        "Wide window layout is unchanged."
+      ]
+    },
+    {
       "version": "0.2.3",
       "date": "2025-12-30",
       "notes": [

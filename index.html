@@ -33,6 +33,10 @@
                     <span class="home-mode__label">Classic mode</span>
                     <span class="home-mode__description">Play Classic Snippit by guessing the location of the zoomed-in map snippit.</span>
                 </div>
+                <div id="radarMode" class="home-mode home-mode--cobalt" role="button" tabindex="0" aria-label="Radar mode">
+                    <span class="home-mode__label">Radar mode</span>
+                    <span class="home-mode__description">Read the radar chart and guess the location based on its characteristics.</span>
+                </div>
                 <div id="revealMode" class="home-mode home-mode--red" role="button" tabindex="0" aria-label="Reveal mode">
                     <span class="home-mode__label">Reveal mode</span>
                     <span class="home-mode__description">Start with a tiny snippit and zoom out each round until you find it.</span>
@@ -172,6 +176,45 @@
                         <input type="radio" name="revealScoring" value="timer" />
                         <span>Timer</span>
                     </label>
+                </div>
+            </div>
+
+            <div id="modeIntroRadarScoring" class="mode-intro__difficulty" style="display:none;" aria-label="Radar scoring">
+                <div class="mode-intro__difficulty-title">Play style</div>
+                <div class="mode-intro__difficulty-options" role="radiogroup" aria-label="Select play style">
+                    <label class="mode-chip">
+                        <input type="radio" name="radarScoring" value="classic" checked />
+                        <span>Classic</span>
+                    </label>
+                    <label class="mode-chip">
+                        <input type="radio" name="radarScoring" value="points" />
+                        <span>Points</span>
+                    </label>
+                </div>
+
+                <div id="modeIntroRadarDifficulty" class="mode-intro__difficulty-inner" style="display:none;" aria-label="Radar difficulty">
+                    <div class="mode-intro__difficulty-title-row">
+                        <div class="mode-intro__difficulty-title">Difficulty</div>
+                        <div id="modeIntroRadarInfoSlot" class="mode-intro__difficulty-info-slot"></div>
+                    </div>
+                    <div class="mode-intro__difficulty-options" role="radiogroup" aria-label="Select difficulty">
+                        <label class="mode-chip">
+                            <input type="radio" name="radarDifficulty" value="normal" checked />
+                            <span>Normal</span>
+                        </label>
+                        <label class="mode-chip">
+                            <input type="radio" name="radarDifficulty" value="challenging" />
+                            <span>Challenging</span>
+                        </label>
+                        <label class="mode-chip">
+                            <input type="radio" name="radarDifficulty" value="hard" />
+                            <span>Hard</span>
+                        </label>
+                        <label class="mode-chip">
+                            <input type="radio" name="radarDifficulty" value="expert" />
+                            <span>Expert</span>
+                        </label>
+                    </div>
                 </div>
             </div>
 

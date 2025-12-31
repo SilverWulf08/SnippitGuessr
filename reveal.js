@@ -670,7 +670,7 @@ function placeGuessMarker(latlng) {
 function updateRevealRoundProgress() {
     const el = document.getElementById('revealRoundProgress');
     if (!el || !revealState) return;
-    el.textContent = `${revealState.round}/${REVEAL_MAX_ROUNDS}`;
+    el.textContent = `Round ${revealState.round}/${REVEAL_MAX_ROUNDS}`;
 }
 
 function startNewGame() {

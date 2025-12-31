@@ -226,6 +226,8 @@ function showModeIntro(mode) {
     const diff = document.getElementById('modeIntroPointsDifficulty');
     const qScoring = document.getElementById('modeIntroQuestionsScoring');
     const qDiff = document.getElementById('modeIntroQuestionsDifficulty');
+    const rScoring = document.getElementById('modeIntroRadarScoring');
+    const rDiff = document.getElementById('modeIntroRadarDifficulty');
     const back = document.getElementById('modeIntroBack');
     const play = document.getElementById('modeIntroPlay');
     if (!intro || !title || !desc || !diff) return;
@@ -282,6 +284,7 @@ function showModeIntro(mode) {
         if (classicScoring) classicScoring.style.display = 'none';
         diff.style.display = 'none';
         if (qScoring) qScoring.style.display = 'block';
+        if (rScoring) rScoring.style.display = 'none';
 
         const revealScoring = document.getElementById('modeIntroRevealScoring');
         if (revealScoring) revealScoring.style.display = 'none';
@@ -304,6 +307,7 @@ function showModeIntro(mode) {
         if (classicScoring) classicScoring.style.display = 'none';
         diff.style.display = 'none';
         if (qScoring) qScoring.style.display = 'none';
+        if (rScoring) rScoring.style.display = 'none';
 
         const revealScoring = document.getElementById('modeIntroRevealScoring');
         if (revealScoring) revealScoring.style.display = 'block';
@@ -311,6 +315,28 @@ function showModeIntro(mode) {
         // Default state: Classic (no timer)
         const classicRadio = document.querySelector('input[name="revealScoring"][value="classic"]');
         if (classicRadio) classicRadio.checked = true;
+    } else if (mode === 'radar') {
+        title.textContent = 'Radar mode';
+        desc.textContent =
+            'Read the radar chart to guess the location based on its characteristics.\n\n' +
+            'The radar shows: Climate, Elevation, Coastal Proximity, Latitude, Urban Density, Rainfall, and Remoteness.\n\n' +
+            'Choose Classic or Points play style.';
+        if (moreBtn) moreBtn.style.display = 'none';
+        if (classicScoring) classicScoring.style.display = 'none';
+        diff.style.display = 'none';
+        if (qScoring) qScoring.style.display = 'none';
+        if (rScoring) rScoring.style.display = 'block';
+
+        const revealScoring = document.getElementById('modeIntroRevealScoring');
+        if (revealScoring) revealScoring.style.display = 'none';
+
+        // Default state: Classic (no points)
+        const classicRadio = document.querySelector('input[name="radarScoring"][value="classic"]');
+        if (classicRadio) classicRadio.checked = true;
+        if (rDiff) rDiff.style.display = 'none';
+
+        const normalDiff = document.querySelector('input[name="radarDifficulty"][value="normal"]');
+        if (normalDiff) normalDiff.checked = true;
     } else if (mode === 'help') {
         // Help / about screen
         title.textContent = 'What is Snippit?';
@@ -327,6 +353,8 @@ function showModeIntro(mode) {
                 'Choose Classic or Points play style.\n\n' +
                 'Questions mode: Answer short prompts by guessing the correct spot on the world map.\n' +
                 'Choose Classic or Points play style.\n\n' +
+                'Radar mode: Read the radar chart showing climate, elevation, coastal proximity, latitude, urban density, rainfall, and remoteness to guess the location.\n' +
+                'Choose Classic or Points play style.\n\n' +
                 'Reveal mode: Start with a very zoomed in snippit and zoom out each round.\n' +
                 'Guess within 5 km in 10 rounds to win. Choose Classic or Timer play style.';
         }
@@ -335,6 +363,7 @@ function showModeIntro(mode) {
         if (classicScoring) classicScoring.style.display = 'none';
         diff.style.display = 'none';
         if (qScoring) qScoring.style.display = 'none';
+        if (rScoring) rScoring.style.display = 'none';
 
         const revealScoringHelp = document.getElementById('modeIntroRevealScoring');
         if (revealScoringHelp) revealScoringHelp.style.display = 'none';
@@ -362,6 +391,7 @@ function showModeIntro(mode) {
         if (classicScoring) classicScoring.style.display = 'none';
         diff.style.display = 'none';
         if (qScoring) qScoring.style.display = 'none';
+        if (rScoring) rScoring.style.display = 'none';
 
         const revealScoringPN = document.getElementById('modeIntroRevealScoring');
         if (revealScoringPN) revealScoringPN.style.display = 'none';
@@ -377,6 +407,7 @@ function showModeIntro(mode) {
         if (classicScoring) classicScoring.style.display = 'none';
         diff.style.display = 'none';
         if (qScoring) qScoring.style.display = 'none';
+        if (rScoring) rScoring.style.display = 'none';
 
         const revealScoringFB = document.getElementById('modeIntroRevealScoring');
         if (revealScoringFB) revealScoringFB.style.display = 'none';
@@ -400,7 +431,7 @@ function updateGlobalHelpButtonVisibility(currentMode) {
     if (!help) return;
 
     // Show on home and on game mode intros; hide on Help and Patch Notes.
-    const visibleModes = new Set(['', 'classic', 'questions', 'reveal']);
+    const visibleModes = new Set(['', 'classic', 'questions', 'radar', 'reveal']);
     help.style.display = visibleModes.has(currentMode || '') ? '' : 'none';
 }
 
@@ -452,6 +483,19 @@ function getSelectedRevealScoring() {
     const selected = document.querySelector('input[name="revealScoring"]:checked');
     return selected ? selected.value : 'classic';
 }
+
+function getSelectedRadarScoring() {
+    const selected = document.querySelector('input[name="radarScoring"]:checked');
+    return selected ? selected.value : 'classic';
+}
+
+function getSelectedRadarDifficulty() {
+    const selected = document.querySelector('input[name="radarDifficulty"]:checked');
+    return selected ? selected.value : 'normal';
+}
+
+const RADAR_USE_POINTS_KEY = 'snippit.radarUsePoints';
+const RADAR_DIFFICULTY_KEY = 'snippit.radarDifficulty';
 
 function startSelectedMode() {
     if (!pendingMode) return;
@@ -510,6 +554,24 @@ function startSelectedMode() {
         return;
     }
 
+    if (pendingMode === 'radar') {
+        sessionStorage.setItem('snippit.startMode', 'radar');
+
+        const usePoints = getSelectedRadarScoring() === 'points';
+        if (usePoints) {
+            sessionStorage.setItem(RADAR_USE_POINTS_KEY, '1');
+            sessionStorage.setItem(RADAR_DIFFICULTY_KEY, getSelectedRadarDifficulty());
+        } else {
+            sessionStorage.removeItem(RADAR_USE_POINTS_KEY);
+            sessionStorage.removeItem(RADAR_DIFFICULTY_KEY);
+        }
+
+        setTimeout(() => {
+            window.location.href = 'radar.html';
+        }, 80);
+        return;
+    }
+
     // (Points mode is launched via Classic -> Classic with points)
 }
 
@@ -517,11 +579,13 @@ function wireModeIntro() {
     const back = document.getElementById('modeIntroBack');
     const play = document.getElementById('modeIntroPlay');
     const qDiff = document.getElementById('modeIntroQuestionsDifficulty');
+    const rDiff = document.getElementById('modeIntroRadarDifficulty');
     const pointsDiff = document.getElementById('modeIntroPointsDifficulty');
     const moreBtn = document.getElementById('modeIntroMoreBtn');
     const moreParking = document.getElementById('modeIntroInfoParking');
     const pointsInfoSlot = document.getElementById('modeIntroPointsInfoSlot');
     const questionsInfoSlot = document.getElementById('modeIntroQuestionsInfoSlot');
+    const radarInfoSlot = document.getElementById('modeIntroRadarInfoSlot');
     const moreOverlay = document.getElementById('modeIntroMoreOverlay');
     const helpPointsInfoBtn = document.getElementById('modeIntroHelpPointsInfoBtn');
 
@@ -576,6 +640,11 @@ function wireModeIntro() {
             }
 
             if (mode === 'questions' && getSelectedQuestionsScoring() === 'points') {
+                showPointsInfo();
+                return;
+            }
+
+            if (mode === 'radar' && getSelectedRadarScoring() === 'points') {
                 showPointsInfo();
                 return;
             }
@@ -651,12 +720,48 @@ function wireModeIntro() {
 
         updateClassicPointsVisibility();
     }
+
+    // Wire radar difficulty visibility toggle
+    if (rDiff) {
+        const updateRadarDifficultyVisibility = () => {
+            const v = getSelectedRadarScoring();
+            rDiff.style.display = (v === 'points') ? 'block' : 'none';
+            if (moreBtn) {
+                const modeIntro = document.getElementById('modeIntro');
+                const mode = modeIntro ? modeIntro.dataset.mode : '';
+                if (mode === 'radar') {
+                    moreBtn.style.display = (v === 'points') ? 'inline-block' : 'none';
+                }
+            }
+
+            if (v === 'points') {
+                placeMoreBtn(radarInfoSlot);
+            } else {
+                const modeIntro = document.getElementById('modeIntro');
+                const mode = modeIntro ? modeIntro.dataset.mode : '';
+                if (mode === 'radar') {
+                    parkMoreBtn();
+                }
+            }
+        };
+
+        document.addEventListener('change', (e) => {
+            const t = e.target;
+            if (!(t instanceof HTMLInputElement)) return;
+            if (t.name === 'radarScoring') {
+                updateRadarDifficultyVisibility();
+            }
+        });
+
+        updateRadarDifficultyVisibility();
+    }
 }
 
 function wireHomeButtons() {
     const classic = document.getElementById('classicMode');
     const points = document.getElementById('revealMode');
     const questions = document.getElementById('questionsMode');
+    const radar = document.getElementById('radarMode');
     const help = document.getElementById('homeHelpBtn');
     const patchNotes = document.getElementById('homePatchNotesBtn');
     const deck = document.getElementById('homeDeck');
@@ -673,19 +778,21 @@ function wireHomeButtons() {
     };
 
     const wireHomeModeDeck = () => {
-        if (!deck || !classic || !questions || !points) {
+        if (!deck || !classic || !questions || !points || !radar) {
             // Fallback: keep the original click behavior.
             activate(questions, () => showModeIntro('questions'));
             activate(classic, () => showModeIntro('classic'));
+            activate(radar, () => showModeIntro('radar'));
             activate(points, () => showModeIntro('reveal'));
             return;
         }
 
         // Canonical order for the deck.
-        const cards = [questions, classic, points];
+        const cards = [questions, classic, radar, points];
         const modeById = {
             questionsMode: 'questions',
             classicMode: 'classic',
+            radarMode: 'radar',
             revealMode: 'reveal'
         };
 
@@ -694,9 +801,10 @@ function wireHomeButtons() {
         let isAnimating = false;
 
         const normalizeDelta = (delta, n) => {
-            // Wrap into [-floor(n/2), floor(n/2)] for n=3 -> [-1, 1]
-            if (delta > 1) return delta - n;
-            if (delta < -1) return delta + n;
+            // Wrap into [-floor(n/2), floor(n/2)] for n=4 -> [-2, 1] or [-1, 2]
+            const half = Math.floor(n / 2);
+            while (delta > half) delta -= n;
+            while (delta < -half) delta += n;
             return delta;
         };
 
@@ -711,27 +819,37 @@ function wireHomeButtons() {
         };
 
         const setActive = (nextIndex, opts = {}) => {
-            const { focus = false } = opts;
+            const { focus = false, animate = false, direction = 1 } = opts;
             if (typeof nextIndex !== 'number') return;
             const n = cards.length;
             const clamped = ((nextIndex % n) + n) % n;
             if (clamped === activeIndex) return;
             if (isAnimating) return;
             isAnimating = true;
-            activeIndex = clamped;
-            applyPositions();
 
-            window.setTimeout(() => {
-                isAnimating = false;
-                if (focus) {
-                    const active = cards[activeIndex];
-                    if (active) active.focus({ preventScroll: true });
-                }
-            }, 540);
+            const finishTransition = () => {
+                activeIndex = clamped;
+                applyPositions();
+
+                window.setTimeout(() => {
+                    isAnimating = false;
+                    if (focus) {
+                        const active = cards[activeIndex];
+                        if (active) active.focus({ preventScroll: true });
+                    }
+                }, 440);
+            };
+
+            // Use flip animation only on stacked (narrow) layout
+            if (animate && isStackedDeckLayout()) {
+                animateStackedFlip(direction, finishTransition);
+            } else {
+                finishTransition();
+            }
         };
 
         const cycle = (dir) => {
-            setActive(activeIndex + dir, { focus: true });
+            setActive(activeIndex + dir, { focus: true, animate: true, direction: dir });
         };
 
         const openActiveMode = () => {
@@ -760,7 +878,12 @@ function wireHomeButtons() {
                 if (e.key === 'Enter' || e.key === ' ') {
                     e.preventDefault();
                     if (i !== activeIndex) {
-                        setActive(i, { focus: true });
+                        const n = cards.length;
+                        let diff = i - activeIndex;
+                        if (diff > 1) diff = diff - n;
+                        if (diff < -1) diff = diff + n;
+                        const direction = diff > 0 ? 1 : -1;
+                        setActive(i, { focus: true, animate: true, direction: direction });
                     } else {
                         openActiveMode();
                     }
@@ -777,9 +900,28 @@ function wireHomeButtons() {
         const SWIPE_MIN_PX = 44;
         const SWIPE_MAX_MS = 700;
 
-        const isVerticalDeckLayout = () => {
-            // Keep this in sync with the CSS breakpoint for the vertical deck.
-            return !!(window.matchMedia && window.matchMedia('(max-width: 520px)').matches);
+        const isStackedDeckLayout = () => {
+            // Keep this in sync with the CSS breakpoint for the stacked deck.
+            return !!(window.matchMedia && window.matchMedia('(max-width: 720px)').matches);
+        };
+
+        // Animation for the stacked deck card flip effect
+        const animateStackedFlip = (direction, callback) => {
+            const n = cards.length;
+            const currentCard = cards[activeIndex];
+            const nextIndex = ((activeIndex + direction) % n + n) % n;
+            const nextCard = cards[nextIndex];
+
+            // Add flip animation classes
+            if (currentCard) currentCard.classList.add('is-flipping-to-back');
+            if (nextCard) nextCard.classList.add('is-flipping-to-front');
+
+            // After a short delay, update positions and remove classes
+            setTimeout(() => {
+                if (currentCard) currentCard.classList.remove('is-flipping-to-back');
+                if (nextCard) nextCard.classList.remove('is-flipping-to-front');
+                callback();
+            }, 180);
         };
 
         const onPointerDown = (e) => {
@@ -801,28 +943,15 @@ function wireHomeButtons() {
             // Must be reasonably quick.
             if (dt > SWIPE_MAX_MS) return;
 
-            if (isVerticalDeckLayout()) {
-                // Vertical deck: swipe up/down.
-                if (Math.abs(dy) < SWIPE_MIN_PX) return;
-                if (Math.abs(dy) < Math.abs(dx) * 1.25) return;
-
-                // Mark that we swiped so click handlers know not to fire.
-                didSwipe = true;
-
-                // Swipe up = next card (down the stack)
-                if (dy < 0) cycle(1);
-                else cycle(-1);
-                return;
-            }
-
-            // Horizontal deck: swipe left/right.
+            // Both layouts now use horizontal swiping
+            // Horizontal swipe: left/right.
             if (Math.abs(dx) < SWIPE_MIN_PX) return;
             if (Math.abs(dx) < Math.abs(dy) * 1.25) return;
 
             // Mark that we swiped so click handlers know not to fire.
             didSwipe = true;
 
-            // Swipe left = next card (to the right)
+            // Swipe left = next card, swipe right = previous card
             if (dx < 0) cycle(1);
             else cycle(-1);
         };
@@ -847,7 +976,14 @@ function wireHomeButtons() {
             if (cardIndex === -1) return;
 
             if (cardIndex !== activeIndex) {
-                setActive(cardIndex);
+                // Calculate the direction for the animation
+                const n = cards.length;
+                let diff = cardIndex - activeIndex;
+                // Normalize to find shortest path
+                if (diff > 1) diff = diff - n;
+                if (diff < -1) diff = diff + n;
+                const direction = diff > 0 ? 1 : -1;
+                setActive(cardIndex, { animate: true, direction: direction });
             } else {
                 openActiveMode();
             }

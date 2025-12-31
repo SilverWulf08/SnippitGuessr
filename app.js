@@ -1,15 +1,17 @@
 /**
- * Snippit - Classic & Questions Mode Game Logic
- * ==============================================
+ * Snippit - Classic, Questions & Radar Mode Game Logic
+ * =====================================================
  * This file handles the main game logic for:
  * - Classic mode (game.html): Guess location from a zoomed-in map snippit
  * - Classic mode with Points (points.html): Same but with timed rounds and scoring
  * - Questions mode (questions.html): Answer questions by guessing on the map
+ * - Radar mode (radar.html): Guess location from a radar chart showing location characteristics
  * 
  * The mode is determined by the data-mode attribute on the body element:
  * - 'classic' or undefined: Classic mode (no points)
  * - 'points': Classic mode with Points play style
  * - 'questions': Questions mode (can also use points scoring)
+ * - 'radar': Radar mode (can also use points scoring)
  * 
  * For Reveal mode, see reveal.js
  */
@@ -31,14 +33,20 @@ const INITIAL_LOAD_DELAY_MS = 900;
 
 let gameInitialized = false;
 
-const GAME_MODE = (document.body && document.body.dataset && document.body.dataset.mode === 'points')
-    ? 'points'
-    : ((document.body && document.body.dataset && document.body.dataset.mode === 'questions') ? 'questions' : 'classic');
+const GAME_MODE = (() => {
+    const mode = document.body && document.body.dataset && document.body.dataset.mode;
+    if (mode === 'points') return 'points';
+    if (mode === 'questions') return 'questions';
+    if (mode === 'radar') return 'radar';
+    return 'classic';
+})();
 const POINTS_ROUNDS_TOTAL = 10;
 const POINTS_GOAL_TOTAL = 1000;
 
 const QUESTIONS_USE_POINTS_KEY = 'snippit.questionsUsePoints';
 const QUESTIONS_DIFFICULTY_KEY = 'snippit.questionsDifficulty';
+const RADAR_USE_POINTS_KEY = 'snippit.radarUsePoints';
+const RADAR_DIFFICULTY_KEY = 'snippit.radarDifficulty';
 
 // Tile sources
 // Main map: CARTO Voyager for English labels + good detail.
@@ -79,7 +87,12 @@ function getConfettiDevicePixelRatioCap() {
 }
 
 function getPointsDifficulty() {
-    const key = (isQuestionsMode() && isQuestionsPointsMode()) ? QUESTIONS_DIFFICULTY_KEY : 'snippit.pointsDifficulty';
+    let key = 'snippit.pointsDifficulty';
+    if (isQuestionsMode() && isQuestionsPointsMode()) {
+        key = QUESTIONS_DIFFICULTY_KEY;
+    } else if (isRadarMode() && isRadarPointsMode()) {
+        key = RADAR_DIFFICULTY_KEY;
+    }
     const v = sessionStorage.getItem(key);
     if (v === 'expert') return 'expert';
     if (v === 'hard') return 'hard';
@@ -129,6 +142,13 @@ let lastPickedQuestionAnswer = '';
 let currentQuestionText = '';
 let currentQuestionFact = '';
 
+// Radar mode deck.
+let radarDeck = [];
+let lastPickedRadarIndex = null;
+let lastPickedRadarName = '';
+
+let currentRadarLocation = null;
+
 // Persist decks across page navigation (Home -> game -> Home -> game) within the same tab.
 // Storage keys are defined in shared.js and cleared only on reload.
 
@@ -174,6 +194,18 @@ function restoreDeckState() {
             lastPickedQuestionAnswer = (typeof meta.lastAnswer === 'string' ? meta.lastAnswer : '');
         }
     }
+
+    // Radar deck
+    if (typeof sessionStorage !== 'undefined' && typeof radarLocations !== 'undefined' && Array.isArray(radarLocations) && radarLocations.length > 0) {
+        const meta = safeJsonParse(sessionStorage.getItem(RADAR_DECK_META_KEY));
+        const deck = safeJsonParse(sessionStorage.getItem(RADAR_DECK_KEY));
+
+        if (meta && meta.len === radarLocations.length && isValidIndexArray(deck, radarLocations.length)) {
+            radarDeck = deck;
+            lastPickedRadarIndex = (Number.isInteger(meta.lastIndex) ? meta.lastIndex : null);
+            lastPickedRadarName = (typeof meta.lastName === 'string' ? meta.lastName : '');
+        }
+    }
 }
 
 function persistLocationDeckState() {
@@ -200,6 +232,21 @@ function persistQuestionDeckState() {
             len: questions.length,
             lastIndex: lastPickedQuestionIndex,
             lastAnswer: lastPickedQuestionAnswer
+        }));
+    } catch {
+        // Ignore storage errors
+    }
+}
+
+function persistRadarDeckState() {
+    try {
+        if (typeof sessionStorage === 'undefined') return;
+        if (typeof radarLocations === 'undefined' || !Array.isArray(radarLocations) || radarLocations.length === 0) return;
+        sessionStorage.setItem(RADAR_DECK_KEY, JSON.stringify(radarDeck));
+        sessionStorage.setItem(RADAR_DECK_META_KEY, JSON.stringify({
+            len: radarLocations.length,
+            lastIndex: lastPickedRadarIndex,
+            lastName: lastPickedRadarName
         }));
     } catch {
         // Ignore storage errors
@@ -354,6 +401,73 @@ function pickNextQuestion() {
     return questions[index];
 }
 
+function refillRadarDeck() {
+    radarDeck = radarLocations.map((_, idx) => idx);
+    shuffleInPlace(radarDeck);
+
+    if (radarDeck.length > 1 && (lastPickedRadarIndex !== null || lastPickedRadarName)) {
+        const nextPos = radarDeck.length - 1;
+        const nextIndex = radarDeck[nextPos];
+        const nextName = (radarLocations[nextIndex] && radarLocations[nextIndex].name) ? radarLocations[nextIndex].name : '';
+
+        const repeatsIndex = (lastPickedRadarIndex !== null) && (nextIndex === lastPickedRadarIndex);
+        const repeatsName = !!(lastPickedRadarName && nextName && nextName === lastPickedRadarName);
+
+        if (repeatsIndex || repeatsName) {
+            let swapPos = nextPos - 1;
+            while (swapPos >= 0) {
+                const candIndex = radarDeck[swapPos];
+                const candName = (radarLocations[candIndex] && radarLocations[candIndex].name) ? radarLocations[candIndex].name : '';
+                const okIndex = (lastPickedRadarIndex === null) || (candIndex !== lastPickedRadarIndex);
+                const okName = (!lastPickedRadarName) || (!candName) || (candName !== lastPickedRadarName);
+                if (okIndex && okName) break;
+                swapPos -= 1;
+            }
+
+            if (swapPos >= 0) {
+                [radarDeck[nextPos], radarDeck[swapPos]] = [radarDeck[swapPos], radarDeck[nextPos]];
+            }
+        }
+    }
+
+    persistRadarDeckState();
+}
+
+function pickNextRadarLocation() {
+    if (!Array.isArray(radarLocations) || radarLocations.length === 0) {
+        throw new Error('No radar locations available. Check radar.js');
+    }
+
+    if (radarDeck.length === 0) {
+        refillRadarDeck();
+    }
+
+    // Avoid immediate repeats by name as well as by index.
+    let index = radarDeck.pop();
+    const pickedName = (radarLocations[index] && radarLocations[index].name) ? radarLocations[index].name : '';
+    if (radarDeck.length > 0 && lastPickedRadarName && pickedName === lastPickedRadarName) {
+        let swapPos = radarDeck.length - 1;
+        while (swapPos >= 0) {
+            const candIndex = radarDeck[swapPos];
+            const candName = (radarLocations[candIndex] && radarLocations[candIndex].name) ? radarLocations[candIndex].name : '';
+            if (candName !== lastPickedRadarName) break;
+            swapPos -= 1;
+        }
+
+        if (swapPos >= 0) {
+            const altIndex = radarDeck[swapPos];
+            radarDeck[swapPos] = index;
+            index = altIndex;
+        }
+    }
+
+    lastPickedRadarIndex = index;
+    lastPickedRadarName = radarLocations[index] ? radarLocations[index].name : '';
+
+    persistRadarDeckState();
+    return radarLocations[index];
+}
+
 function initGameIfNeeded() {
     if (gameInitialized) return;
 
@@ -417,6 +531,12 @@ function initGameIfNeeded() {
         pointsState = null;
     }
 
+    // Hide timer if not in points scoring mode
+    const timerEl = document.getElementById('pointsTimer');
+    if (timerEl) {
+        timerEl.style.display = isPointsScoringMode() ? 'block' : 'none';
+    }
+
     gameInitialized = true;
 }
 
@@ -440,8 +560,16 @@ function isQuestionsPointsMode() {
     return sessionStorage.getItem(QUESTIONS_USE_POINTS_KEY) === '1';
 }
 
+function isRadarMode() {
+    return GAME_MODE === 'radar';
+}
+
+function isRadarPointsMode() {
+    return sessionStorage.getItem(RADAR_USE_POINTS_KEY) === '1';
+}
+
 function isPointsScoringMode() {
-    return isPointsMode() || (isQuestionsMode() && isQuestionsPointsMode());
+    return isPointsMode() || (isQuestionsMode() && isQuestionsPointsMode()) || (isRadarMode() && isRadarPointsMode());
 }
 
 function setQuestionText(text) {
@@ -615,7 +743,13 @@ function showPointsSummaryOverlay() {
                 titleEl.textContent = '🎉 Goal Reached!';
             }
         } else {
-            titleEl.textContent = isQuestionsMode() ? 'Questions (Points)' : 'Classic (Points)';
+            if (isQuestionsMode()) {
+                titleEl.textContent = 'Questions (Points)';
+            } else if (isRadarMode()) {
+                titleEl.textContent = 'Radar (Points)';
+            } else {
+                titleEl.textContent = 'Classic (Points)';
+            }
         }
     }
 
@@ -789,7 +923,7 @@ function onPointsRoundTimeout() {
     if (distanceEl) distanceEl.textContent = '—';
 
     const roundEl = document.getElementById('roundProgress');
-    if (roundEl && pointsState) roundEl.textContent = `${pointsState.round}/${POINTS_ROUNDS_TOTAL}`;
+    if (roundEl && pointsState) roundEl.textContent = `Round ${pointsState.round}/${POINTS_ROUNDS_TOTAL}`;
 
     const resultText = document.getElementById('resultText');
     if (resultText) resultText.textContent = "⏰ You didn't make a guess in time.";
@@ -799,11 +933,20 @@ function onPointsRoundTimeout() {
 
     const guessedNameEl = document.getElementById('guessedLocationName');
     if (guessedNameEl) guessedNameEl.innerHTML = '<strong>You guessed:</strong> (no guess)';
+    
+    // Show round/points counter for Points mode even on timeout
+    if (isPointsScoringMode() && pointsState && guessedNameEl) {
+        const roundCounter = `Round ${pointsState.round}/${POINTS_ROUNDS_TOTAL} • ${pointsState.totalPoints}/${POINTS_GOAL_TOTAL} pts`;
+        guessedNameEl.innerHTML = `<strong>You guessed:</strong> (no guess)<br><span style="color: rgba(255,255,255,0.7); font-size: 0.9em; margin-top: 4px; display: inline-block;">${roundCounter}</span>`;
+    }
 
     const factEl = document.getElementById('factText');
     if (factEl) {
         if (isQuestionsMode() && currentQuestionFact) {
             factEl.textContent = currentQuestionFact;
+            factEl.style.display = 'block';
+        } else if (isRadarMode() && currentRadarLocation && currentRadarLocation.fact) {
+            factEl.textContent = currentRadarLocation.fact;
             factEl.style.display = 'block';
         } else {
             factEl.textContent = '';
@@ -1245,7 +1388,7 @@ function newRound() {
         }
 
         const roundEl = document.getElementById('roundProgress');
-        if (roundEl) roundEl.textContent = `${pointsState.round}/${POINTS_ROUNDS_TOTAL}`;
+        if (roundEl) roundEl.textContent = `Round ${pointsState.round}/${POINTS_ROUNDS_TOTAL}`;
 
         startPointsRoundTimer();
     }
@@ -1258,6 +1401,30 @@ function newRound() {
         setQuestionFact(q.fact || '');
 
         // No minimap in Questions mode.
+        if (miniMap) {
+            miniMap.off();
+            miniMap.remove();
+            miniMap = null;
+        }
+    } else if (isRadarMode()) {
+        const loc = pickNextRadarLocation();
+        actualLocation = { lat: loc.lat, lng: loc.lng };
+        currentLocationName = loc.name;
+        currentRadarLocation = loc;
+
+        // Draw radar chart
+        const canvas = document.getElementById('radarCanvas');
+        if (canvas && typeof drawRadarChart === 'function') {
+            drawRadarChart(canvas, loc.radar);
+        }
+
+        // Update legend
+        const legend = document.getElementById('radarLegend');
+        if (legend && typeof updateRadarLegend === 'function') {
+            updateRadarLegend(legend);
+        }
+
+        // No minimap in Radar mode.
         if (miniMap) {
             miniMap.off();
             miniMap.remove();
@@ -1429,10 +1596,10 @@ function makeGuess() {
         pointsState.totalPoints += awarded;
 
         const progressEl = document.getElementById('pointsProgress');
-        if (progressEl) progressEl.textContent = `${pointsState.totalPoints}/${POINTS_GOAL_TOTAL}`;
+        if (progressEl) progressEl.textContent = `${pointsState.totalPoints}/${POINTS_GOAL_TOTAL} pts`;
 
         const roundEl = document.getElementById('roundProgress');
-        if (roundEl) roundEl.textContent = `${pointsState.round}/${POINTS_ROUNDS_TOTAL}`;
+        if (roundEl) roundEl.textContent = `Round ${pointsState.round}/${POINTS_ROUNDS_TOTAL}`;
 
         const multiplierText = multiplier === 1 ? '' : ` (x${multiplier})`;
         message = `${message} +${awarded} points${multiplierText}`;
@@ -1483,9 +1650,21 @@ function makeGuess() {
     if (resultText) resultText.textContent = message;
     if (actualName) actualName.innerHTML = `<strong>Actual location:</strong> ${currentLocationName}`;
     if (guessedNameEl) guessedNameEl.innerHTML = `<strong>You guessed near:</strong> ${guessedName}`;
+    
+    // Show round/points counter for Points mode
+    if (isPointsScoringMode() && pointsState) {
+        const roundCounter = `Round ${pointsState.round}/${POINTS_ROUNDS_TOTAL} • ${pointsState.totalPoints}/${POINTS_GOAL_TOTAL} pts`;
+        if (guessedNameEl) {
+            guessedNameEl.innerHTML = `<strong>You guessed near:</strong> ${guessedName}<br><span style="color: rgba(255,255,255,0.7); font-size: 0.9em; margin-top: 4px; display: inline-block;">${roundCounter}</span>`;
+        }
+    }
+    
     if (factEl) {
         if (isQuestionsMode() && currentQuestionFact) {
             factEl.textContent = currentQuestionFact;
+            factEl.style.display = 'block';
+        } else if (isRadarMode() && currentRadarLocation && currentRadarLocation.fact) {
+            factEl.textContent = currentRadarLocation.fact;
             factEl.style.display = 'block';
         } else {
             factEl.textContent = '';

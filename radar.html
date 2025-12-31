@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Snippit Questions</title>
+    <title>Snippit Radar</title>
     <link rel="icon" href="white compass.png" type="image/png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -11,15 +11,15 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <link rel="stylesheet" href="styles.css?v=20251230_3" />
 </head>
-<body data-mode="questions">
+<body data-mode="radar">
     <script>
-        // Refreshing or directly opening the questions page should return to the home screen.
+        // Refreshing or directly opening the radar page should return to the home screen.
         // Only allow entry if navigated from the home screen (set by home.js).
         (() => {
             const key = 'snippit.startMode';
             const mode = sessionStorage.getItem(key);
 
-            if (mode !== 'questions') {
+            if (mode !== 'radar') {
                 window.location.replace('index.html');
                 return;
             }
@@ -41,10 +41,11 @@
         <div id="panorama">
             <button id="homeButton" class="home-button" type="button" onclick="window.location.href='index.html'">Home</button>
             <div id="pointsTimer" class="points-timer" aria-live="polite">2:00</div>
-            <div id="questionPanel" class="question-panel" role="region" aria-label="Question">
-                <div class="question-panel__card">
-                    <div class="question-panel__kicker">Question</div>
-                    <div id="questionText" class="question-panel__text">Loading question…</div>
+            <div id="radarPanel" class="radar-panel" role="region" aria-label="Radar Chart">
+                <div class="radar-panel__card">
+                    <div class="radar-panel__kicker">Location Radar</div>
+                    <canvas id="radarCanvas" class="radar-panel__canvas" width="320" height="320"></canvas>
+                    <div id="radarLegend" class="radar-panel__legend"></div>
                 </div>
             </div>
         </div>
@@ -76,7 +77,7 @@
         <button id="nextBtn" style="display: none;">Next Round</button>
     </div>
 
-    <!-- End-of-game summary overlay (reused for Questions with Points) -->
+    <!-- End-of-game summary overlay (reused for Radar with Points) -->
     <div id="pointsSummaryOverlay" class="points-summary-overlay" style="display:none;" aria-hidden="true">
         <canvas id="confettiCanvas" class="confetti-canvas" aria-hidden="true"></canvas>
         <div class="points-summary-card" role="dialog" aria-modal="true" aria-labelledby="pointsSummaryTitle">
@@ -97,7 +98,7 @@
                     <path fill="currentColor" d="M32 6l2 5h5l-4 3 2 5-5-3-5 3 2-5-4-3h5z"/>
                 </svg>
             </div>
-            <div id="pointsSummaryTitle" class="points-summary-title">Points Mode</div>
+            <div id="pointsSummaryTitle" class="points-summary-title">Radar Mode</div>
             <div class="points-summary-body">
                 <div id="pointsSummaryScore" class="points-summary-score"></div>
                 <div id="pointsSummaryGoal" class="points-summary-goal"></div>
@@ -122,7 +123,7 @@
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="locations.js"></script>
-    <script src="questions.js"></script>
+    <script src="radar.js"></script>
     <script src="shared.js?v=20251230_2"></script>
     <script src="app.js?v=20251230_3"></script>
 </body>

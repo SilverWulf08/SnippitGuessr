@@ -8,8 +8,10 @@
 // Persisted non-repeating decks (cleared only on reload).
 const LOCATION_DECK_KEY = 'snippit.locationDeck';
 const QUESTION_DECK_KEY = 'snippit.questionDeck';
+const RADAR_DECK_KEY = 'snippit.radarDeck';
 const LOCATION_DECK_META_KEY = 'snippit.locationDeckMeta';
 const QUESTION_DECK_META_KEY = 'snippit.questionDeckMeta';
+const RADAR_DECK_META_KEY = 'snippit.radarDeckMeta';
 
 function getNavigationType() {
     try {
@@ -35,7 +37,9 @@ function clearDecksOnReload() {
         // Reset the non-repeating decks on a hard refresh.
         sessionStorage.removeItem(LOCATION_DECK_KEY);
         sessionStorage.removeItem(QUESTION_DECK_KEY);
+        sessionStorage.removeItem(RADAR_DECK_KEY);
         sessionStorage.removeItem(LOCATION_DECK_META_KEY);
         sessionStorage.removeItem(QUESTION_DECK_META_KEY);
+        sessionStorage.removeItem(RADAR_DECK_META_KEY);
     }
 }
