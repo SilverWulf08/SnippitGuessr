@@ -2,6 +2,17 @@
   "intro": "Patch notes for Snippit. Latest changes are at the top. (these patch notes and versions start at the release of the patch notes system)",
   "versions": [
     {
+      "version": "0.3.2",
+      "date": "2026-01-07",
+      "notes": [
+        "Radar mode: Expanded radar chart from 7 to 10 axes for richer location analysis and more engaging gameplay.",
+        "Radar mode: Renamed properties for clarity.",
+        "Radar mode: Added 3 new location properties: development (developing vs developed), tourism (unexplored vs tourist hub), and wealth (economic prosperity).",
+        "Radar mode: Updated axis labels to single descriptive words: Temperature, Mountainous, Coastal, Polar, Urban, Rainy, Accessible, Developed, Tourism, Wealth.",
+        "Radar mode: Removed the legend display to simplify the interface and focus attention on the radar chart."
+      ]
+    },
+    {
       "version": "0.3.1",
       "date": "2025-12-31",
       "notes": [

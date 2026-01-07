@@ -1419,10 +1419,10 @@ function newRound() {
         }
 
         // Update legend
-        const legend = document.getElementById('radarLegend');
-        if (legend && typeof updateRadarLegend === 'function') {
-            updateRadarLegend(legend);
-        }
+        // const legend = document.getElementById('radarLegend');
+        // if (legend && typeof updateRadarLegend === 'function') {
+        //     updateRadarLegend(legend);
+        // }
 
         // No minimap in Radar mode.
         if (miniMap) {

@@ -1,17 +1,20 @@
-/**
+﻿/**
  * Snippit - Radar Mode Data & Chart
  * ==================================
  * Contains location data with radar characteristics for Radar mode.
- * Each location has values for 7 axes that describe its characteristics.
+ * Each location has values for 10 axes that describe its characteristics.
  * 
  * Radar Axes (0-100 scale):
- * - climate: 0 = Hot, 100 = Cold
- * - elevation: 0 = Flat, 100 = Mountainous
- * - coastal: 0 = Inland, 100 = Coastal
+ * - temperature: 0 = Hot, 100 = Cold
+ * - terrain: 0 = Flat, 100 = Mountainous
+ * - coast: 0 = Inland, 100 = Coastal
  * - latitude: 0 = Equator, 100 = Polar
- * - urban: 0 = Rural, 100 = Mega-city
- * - rainfall: 0 = Dry, 100 = Wet
- * - remoteness: 0 = Isolated, 100 = Central
+ * - population: 0 = Rural, 100 = Urban
+ * - precipitation: 0 = Arid, 100 = Rainy
+ * - accessibility: 100 = Remote, 100 = Accessible
+ * - development: 0 = Developing, 100 = Developed
+ * - tourism: 0 = Unexplored, 100 = Tourist Hub
+ * - wealth: 0 = Poor, 100 = Wealthy
  * 
  * Used by: app.js (Radar mode)
  */
@@ -25,13 +28,16 @@ const radarLocations = [
         lat: 64.1466,
         lng: -21.9426,
         radar: {
-            climate: 85,      // Cold
-            elevation: 15,    // Relatively flat
-            coastal: 95,      // Very coastal
+            temperature: 85,      // Cold
+            terrain: 15,    // Relatively flat
+            coast: 95,      // Very coastal
             latitude: 80,     // Near polar
-            urban: 45,        // Small city
-            rainfall: 65,     // Moderate-wet
-            remoteness: 25    // Fairly isolated
+            population: 45,        // Small city
+            precipitation: 65,     // Moderate-wet
+            accessibility: 75,    // Fairly isolated
+            development: 50,   // Default
+            tourism: 50,       // Default
+            wealth: 50         // Default
         }
     },
     {
@@ -40,13 +46,16 @@ const radarLocations = [
         lat: 25.2048,
         lng: 55.2708,
         radar: {
-            climate: 5,       // Very hot
-            elevation: 5,     // Very flat
-            coastal: 90,      // Coastal
+            temperature: 5,       // Very hot
+            terrain: 5,     // Very flat
+            coast: 90,      // Coastal
             latitude: 25,     // Near equator
-            urban: 95,        // Mega-city
-            rainfall: 5,      // Very dry
-            remoteness: 85    // Very central (hub)
+            population: 95,        // Mega-city
+            precipitation: 5,      // Very dry
+            accessibility: 15,    // Very central (hub)
+            development: 50,   // Default
+            tourism: 50,       // Default
+            wealth: 50         // Default
         }
     },
     {
@@ -55,13 +64,16 @@ const radarLocations = [
         lat: 27.7172,
         lng: 85.3240,
         radar: {
-            climate: 55,      // Moderate
-            elevation: 90,    // Very mountainous
-            coastal: 5,       // Very inland
+            temperature: 55,      // Moderate
+            terrain: 90,    // Very mountainous
+            coast: 5,       // Very inland
             latitude: 30,     // Subtropical
-            urban: 70,        // Large city
-            rainfall: 70,     // Wet (monsoon)
-            remoteness: 40    // Somewhat isolated
+            population: 70,        // Large city
+            precipitation: 70,     // Wet (monsoon)
+            accessibility: 60,    // Somewhat isolated
+            development: 50,   // Default
+            tourism: 50,       // Default
+            wealth: 50         // Default
         }
     },
     {
@@ -70,13 +82,16 @@ const radarLocations = [
         lat: 1.3521,
         lng: 103.8198,
         radar: {
-            climate: 10,      // Hot tropical
-            elevation: 5,     // Very flat
-            coastal: 100,     // Island nation
+            temperature: 10,      // Hot tropical
+            terrain: 5,     // Very flat
+            coast: 100,     // Island nation
             latitude: 5,      // On the equator
-            urban: 100,       // Mega-city
-            rainfall: 85,     // Very wet
-            remoteness: 95    // Major global hub
+            population: 100,       // Mega-city
+            precipitation: 85,     // Very wet
+            accessibility: 5,    // Major global hub
+            development: 50,   // Default
+            tourism: 50,       // Default
+            wealth: 50         // Default
         }
     },
     {
@@ -85,13 +100,16 @@ const radarLocations = [
         lat: -16.4897,
         lng: -68.1193,
         radar: {
-            climate: 50,      // Cool due to altitude
-            elevation: 95,    // Very high altitude
-            coastal: 5,       // Landlocked
+            temperature: 50,      // Cool due to altitude
+            terrain: 95,    // Very high altitude
+            coast: 5,       // Landlocked
             latitude: 20,     // Tropical latitude
-            urban: 65,        // Large city
-            rainfall: 45,     // Moderate
-            remoteness: 30    // Fairly isolated
+            population: 65,        // Large city
+            precipitation: 45,     // Moderate
+            accessibility: 70,    // Fairly isolated
+            development: 50,   // Default
+            tourism: 50,       // Default
+            wealth: 50         // Default
         }
     },
     {
@@ -100,28 +118,34 @@ const radarLocations = [
         lat: -33.8688,
         lng: 151.2093,
         radar: {
-            climate: 35,      // Warm temperate
-            elevation: 15,    // Coastal plains
-            coastal: 95,      // Harbor city
+            temperature: 35,      // Warm temperate
+            terrain: 15,    // Coastal plains
+            coast: 95,      // Harbor city
             latitude: 40,     // Mid-latitude
-            urban: 90,        // Major city
-            rainfall: 50,     // Moderate
-            remoteness: 60    // Moderate connectivity
+            population: 90,        // Major city
+            precipitation: 50,     // Moderate
+            accessibility: 40,    // Moderate connectivity
+            development: 50,   // Default
+            tourism: 50,       // Default
+            wealth: 50         // Default
         }
     },
     {
         name: 'Ulaanbaatar, Mongolia',
-        fact: 'Ulaanbaatar is the coldest capital city in the world with winter temperatures dropping to -40°C.',
+        fact: 'Ulaanbaatar is the coldest capital city in the world with winter temperatures dropping to -40Â°C.',
         lat: 47.8864,
         lng: 106.9057,
         radar: {
-            climate: 95,      // Extremely cold
-            elevation: 70,    // High plateau
-            coastal: 0,       // Very landlocked
+            temperature: 95,      // Extremely cold
+            terrain: 70,    // High plateau
+            coast: 0,       // Very landlocked
             latitude: 55,     // Mid-high latitude
-            urban: 55,        // Medium city
-            rainfall: 15,     // Very dry
-            remoteness: 15    // Very isolated
+            population: 55,        // Medium city
+            precipitation: 15,     // Very dry
+            accessibility: 85,    // Very isolated
+            development: 50,   // Default
+            tourism: 50,       // Default
+            wealth: 50         // Default
         }
     },
     {
@@ -130,28 +154,34 @@ const radarLocations = [
         lat: 19.0760,
         lng: 72.8777,
         radar: {
-            climate: 15,      // Hot tropical
-            elevation: 5,     // Coastal flat
-            coastal: 95,      // Peninsula
+            temperature: 15,      // Hot tropical
+            terrain: 5,     // Coastal flat
+            coast: 95,      // Peninsula
             latitude: 22,     // Tropical
-            urban: 100,       // Mega-city
-            rainfall: 90,     // Monsoon - very wet
-            remoteness: 85    // Major hub
+            population: 100,       // Mega-city
+            precipitation: 90,     // Monsoon - very wet
+            accessibility: 15,    // Major hub
+            development: 50,   // Default
+            tourism: 50,       // Default
+            wealth: 50         // Default
         }
     },
     {
-        name: 'Tromsø, Norway',
-        fact: 'Tromsø experiences polar night from November to January and midnight sun from May to July.',
+        name: 'TromsÃ¸, Norway',
+        fact: 'TromsÃ¸ experiences polar night from November to January and midnight sun from May to July.',
         lat: 69.6492,
         lng: 18.9553,
         radar: {
-            climate: 90,      // Very cold
-            elevation: 40,    // Fjord/mountain mix
-            coastal: 85,      // Fjord coast
+            temperature: 90,      // Very cold
+            terrain: 40,    // Fjord/mountain mix
+            coast: 85,      // Fjord coast
             latitude: 90,     // Arctic
-            urban: 30,        // Small city
-            rainfall: 55,     // Moderate
-            remoteness: 20    // Remote
+            population: 30,        // Small city
+            precipitation: 55,     // Moderate
+            accessibility: 80,    // Remote
+            development: 50,   // Default
+            tourism: 50,       // Default
+            wealth: 50         // Default
         }
     },
     {
@@ -160,13 +190,16 @@ const radarLocations = [
         lat: -12.0464,
         lng: -77.0428,
         radar: {
-            climate: 30,      // Mild/warm
-            elevation: 10,    // Coastal
-            coastal: 95,      // Pacific coast
+            temperature: 30,      // Mild/warm
+            terrain: 10,    // Coastal
+            coast: 95,      // Pacific coast
             latitude: 15,     // Tropical
-            urban: 85,        // Large city
-            rainfall: 5,      // Extremely dry
-            remoteness: 55    // Moderate
+            population: 85,        // Large city
+            precipitation: 5,      // Extremely dry
+            accessibility: 45,    // Moderate
+            development: 50,   // Default
+            tourism: 50,       // Default
+            wealth: 50         // Default
         }
     },
     {
@@ -175,13 +208,16 @@ const radarLocations = [
         lat: 29.6500,
         lng: 91.1000,
         radar: {
-            climate: 65,      // Cold due to altitude
-            elevation: 100,   // Extremely high
-            coastal: 0,       // Very inland
+            temperature: 65,      // Cold due to altitude
+            terrain: 100,   // Extremely high
+            coast: 0,       // Very inland
             latitude: 35,     // Mid-latitude
-            urban: 40,        // Small city
-            rainfall: 25,     // Semi-arid
-            remoteness: 10    // Very isolated
+            population: 40,        // Small city
+            precipitation: 25,     // Semi-arid
+            accessibility: 90,    // Very isolated
+            development: 50,   // Default
+            tourism: 50,       // Default
+            wealth: 50         // Default
         }
     },
     {
@@ -190,13 +226,16 @@ const radarLocations = [
         lat: -3.1190,
         lng: -60.0217,
         radar: {
-            climate: 10,      // Hot tropical
-            elevation: 10,    // Lowland
-            coastal: 25,      // River inland
+            temperature: 10,      // Hot tropical
+            terrain: 10,    // Lowland
+            coast: 25,      // River inland
             latitude: 5,      // Equatorial
-            urban: 70,        // Large city
-            rainfall: 95,     // Extremely wet
-            remoteness: 15    // Very isolated
+            population: 70,        // Large city
+            precipitation: 95,     // Extremely wet
+            accessibility: 85,    // Very isolated
+            development: 50,   // Default
+            tourism: 50,       // Default
+            wealth: 50         // Default
         }
     },
     {
@@ -205,13 +244,16 @@ const radarLocations = [
         lat: 35.6762,
         lng: 139.6503,
         radar: {
-            climate: 45,      // Temperate
-            elevation: 20,    // Coastal plain
-            coastal: 80,      // Bay area
+            temperature: 45,      // Temperate
+            terrain: 20,    // Coastal plain
+            coast: 80,      // Bay area
             latitude: 42,     // Mid-latitude
-            urban: 100,       // Mega-city
-            rainfall: 65,     // Moderate-wet
-            remoteness: 90    // Major global hub
+            population: 100,       // Mega-city
+            precipitation: 65,     // Moderate-wet
+            accessibility: 10,    // Major global hub
+            development: 50,   // Default
+            tourism: 50,       // Default
+            wealth: 50         // Default
         }
     },
     {
@@ -220,13 +262,16 @@ const radarLocations = [
         lat: -1.2921,
         lng: 36.8219,
         radar: {
-            climate: 35,      // Mild (highland)
-            elevation: 70,    // High plateau
-            coastal: 5,       // Inland
+            temperature: 35,      // Mild (highland)
+            terrain: 70,    // High plateau
+            coast: 5,       // Inland
             latitude: 5,      // Equatorial
-            urban: 75,        // Large city
-            rainfall: 45,     // Moderate
-            remoteness: 50    // Regional hub
+            population: 75,        // Large city
+            precipitation: 45,     // Moderate
+            accessibility: 50,    // Regional hub
+            development: 50,   // Default
+            tourism: 50,       // Default
+            wealth: 50         // Default
         }
     },
     {
@@ -235,13 +280,16 @@ const radarLocations = [
         lat: 78.2232,
         lng: 15.6267,
         radar: {
-            climate: 100,     // Arctic cold
-            elevation: 30,    // Mountainous terrain
-            coastal: 75,      // Fjord coast
+            temperature: 100,     // Arctic cold
+            terrain: 30,    // Mountainous terrain
+            coast: 75,      // Fjord coast
             latitude: 100,    // Near North Pole
-            urban: 10,        // Tiny settlement
-            rainfall: 20,     // Arctic desert
-            remoteness: 5     // Extremely isolated
+            population: 10,        // Tiny settlement
+            precipitation: 20,     // Arctic desert
+            accessibility: 95,    // Extremely isolated
+            development: 50,   // Default
+            tourism: 50,       // Default
+            wealth: 50         // Default
         }
     },
     {
@@ -250,13 +298,16 @@ const radarLocations = [
         lat: 30.0444,
         lng: 31.2357,
         radar: {
-            climate: 10,      // Hot desert
-            elevation: 10,    // Nile valley
-            coastal: 40,      // Near Mediterranean
+            temperature: 10,      // Hot desert
+            terrain: 10,    // Nile valley
+            coast: 40,      // Near Mediterranean
             latitude: 35,     // Subtropical
-            urban: 95,        // Mega-city
-            rainfall: 5,      // Very dry
-            remoteness: 80    // Major hub
+            population: 95,        // Mega-city
+            precipitation: 5,      // Very dry
+            accessibility: 20,    // Major hub
+            development: 50,   // Default
+            tourism: 50,       // Default
+            wealth: 50         // Default
         }
     },
     {
@@ -265,13 +316,16 @@ const radarLocations = [
         lat: 49.2827,
         lng: -123.1207,
         radar: {
-            climate: 55,      // Mild/cool
-            elevation: 50,    // Mountains nearby
-            coastal: 90,      // Pacific coast
+            temperature: 55,      // Mild/cool
+            terrain: 50,    // Mountains nearby
+            coast: 90,      // Pacific coast
             latitude: 55,     // Northern temperate
-            urban: 80,        // Large city
-            rainfall: 75,     // Rainy
-            remoteness: 65    // Well connected
+            population: 80,        // Large city
+            precipitation: 75,     // Rainy
+            accessibility: 35,    // Well connected
+            development: 50,   // Default
+            tourism: 50,       // Default
+            wealth: 50         // Default
         }
     },
     {
@@ -280,13 +334,16 @@ const radarLocations = [
         lat: -23.6980,
         lng: 133.8807,
         radar: {
-            climate: 15,      // Hot desert
-            elevation: 55,    // Desert plateau
-            coastal: 0,       // Very inland
+            temperature: 15,      // Hot desert
+            terrain: 55,    // Desert plateau
+            coast: 0,       // Very inland
             latitude: 28,     // Subtropical
-            urban: 20,        // Small town
-            rainfall: 10,     // Very dry
-            remoteness: 5     // Extremely isolated
+            population: 20,        // Small town
+            precipitation: 10,     // Very dry
+            accessibility: 95,    // Extremely isolated
+            development: 50,   // Default
+            tourism: 50,       // Default
+            wealth: 50         // Default
         }
     },
     {
@@ -295,13 +352,16 @@ const radarLocations = [
         lat: 52.3676,
         lng: 4.9041,
         radar: {
-            climate: 55,      // Cool temperate
-            elevation: 0,     // Below sea level
-            coastal: 75,      // Near North Sea
+            temperature: 55,      // Cool temperate
+            terrain: 0,     // Below sea level
+            coast: 75,      // Near North Sea
             latitude: 58,     // Northern Europe
-            urban: 80,        // Major city
-            rainfall: 60,     // Moderate-wet
-            remoteness: 95    // Very central (Europe)
+            population: 80,        // Major city
+            precipitation: 60,     // Moderate-wet
+            accessibility: 5,    // Very central (Europe)
+            development: 50,   // Default
+            tourism: 50,       // Default
+            wealth: 50         // Default
         }
     },
     {
@@ -310,13 +370,16 @@ const radarLocations = [
         lat: -33.9249,
         lng: 18.4241,
         radar: {
-            climate: 40,      // Mediterranean
-            elevation: 65,    // Mountain backdrop
-            coastal: 95,      // Peninsula
+            temperature: 40,      // Mediterranean
+            terrain: 65,    // Mountain backdrop
+            coast: 95,      // Peninsula
             latitude: 40,     // Mid-latitude
-            urban: 75,        // Large city
-            rainfall: 35,     // Seasonal
-            remoteness: 45    // Moderate
+            population: 75,        // Large city
+            precipitation: 35,     // Seasonal
+            accessibility: 55,    // Moderate
+            development: 50,   // Default
+            tourism: 50,       // Default
+            wealth: 50         // Default
         }
     },
     {
@@ -325,13 +388,16 @@ const radarLocations = [
         lat: -54.8019,
         lng: -68.3030,
         radar: {
-            climate: 75,      // Cold subpolar
-            elevation: 55,    // Mountainous coast
-            coastal: 90,      // Beagle Channel
+            temperature: 75,      // Cold subpolar
+            terrain: 55,    // Mountainous coast
+            coast: 90,      // Beagle Channel
             latitude: 70,     // Subantarctic
-            urban: 25,        // Small city
-            rainfall: 55,     // Moderate
-            remoteness: 10    // Very isolated
+            population: 25,        // Small city
+            precipitation: 55,     // Moderate
+            accessibility: 90,    // Very isolated
+            development: 50,   // Default
+            tourism: 50,       // Default
+            wealth: 50         // Default
         }
     },
     {
@@ -340,13 +406,16 @@ const radarLocations = [
         lat: 16.7666,
         lng: -3.0026,
         radar: {
-            climate: 5,       // Hot desert
-            elevation: 20,    // Sahel lowlands
-            coastal: 0,       // Very inland
+            temperature: 5,       // Hot desert
+            terrain: 20,    // Sahel lowlands
+            coast: 0,       // Very inland
             latitude: 20,     // Tropical
-            urban: 15,        // Small town
-            rainfall: 10,     // Very dry
-            remoteness: 5     // Extremely isolated
+            population: 15,        // Small town
+            precipitation: 10,     // Very dry
+            accessibility: 95,    // Extremely isolated
+            development: 50,   // Default
+            tourism: 50,       // Default
+            wealth: 50         // Default
         }
     },
     {
@@ -355,28 +424,34 @@ const radarLocations = [
         lat: 60.1699,
         lng: 24.9384,
         radar: {
-            climate: 85,      // Cold
-            elevation: 15,    // Low coastal
-            coastal: 85,      // Baltic Sea
+            temperature: 85,      // Cold
+            terrain: 15,    // Low coastal
+            coast: 85,      // Baltic Sea
             latitude: 75,     // Northern
-            urban: 70,        // Large city
-            rainfall: 50,     // Moderate
-            remoteness: 70    // Well connected
+            population: 70,        // Large city
+            precipitation: 50,     // Moderate
+            accessibility: 30,    // Well connected
+            development: 50,   // Default
+            tourism: 50,       // Default
+            wealth: 50         // Default
         }
     },
     {
         name: 'Phoenix, Arizona',
-        fact: 'Phoenix is the hottest major city in the United States, with temperatures exceeding 100°F for months.',
+        fact: 'Phoenix is the hottest major city in the United States, with temperatures exceeding 100Â°F for months.',
         lat: 33.4484,
         lng: -112.0740,
         radar: {
-            climate: 0,       // Extremely hot
-            elevation: 35,    // Desert plateau
-            coastal: 0,       // Very inland
+            temperature: 0,       // Extremely hot
+            terrain: 35,    // Desert plateau
+            coast: 0,       // Very inland
             latitude: 38,     // Subtropical
-            urban: 85,        // Large city
-            rainfall: 5,      // Very dry
-            remoteness: 75    // Well connected
+            population: 85,        // Large city
+            precipitation: 5,      // Very dry
+            accessibility: 25,    // Well connected
+            development: 50,   // Default
+            tourism: 50,       // Default
+            wealth: 50         // Default
         }
     },
     {
@@ -385,13 +460,16 @@ const radarLocations = [
         lat: 60.3913,
         lng: 5.3221,
         radar: {
-            climate: 70,      // Cool oceanic
-            elevation: 60,    // Fjord mountains
-            coastal: 95,      // Fjord coast
+            temperature: 70,      // Cool oceanic
+            terrain: 60,    // Fjord mountains
+            coast: 95,      // Fjord coast
             latitude: 75,     // Northern
-            urban: 50,        // Medium city
-            rainfall: 95,     // Extremely wet
-            remoteness: 45    // Moderate
+            population: 50,        // Medium city
+            precipitation: 95,     // Extremely wet
+            accessibility: 55,    // Moderate
+            development: 50,   // Default
+            tourism: 50,       // Default
+            wealth: 50         // Default
         }
     },
     {
@@ -400,13 +478,16 @@ const radarLocations = [
         lat: -0.1807,
         lng: -78.4678,
         radar: {
-            climate: 55,      // Cool due to altitude
-            elevation: 85,    // High Andes
-            coastal: 15,      // Inland but near coast
+            temperature: 55,      // Cool due to altitude
+            terrain: 85,    // High Andes
+            coast: 15,      // Inland but near coast
             latitude: 5,      // On the equator
-            urban: 75,        // Large city
-            rainfall: 60,     // Moderate-wet
-            remoteness: 50    // Regional hub
+            population: 75,        // Large city
+            precipitation: 60,     // Moderate-wet
+            accessibility: 50,    // Regional hub
+            development: 50,   // Default
+            tourism: 50,       // Default
+            wealth: 50         // Default
         }
     },
     {
@@ -415,13 +496,16 @@ const radarLocations = [
         lat: 41.0082,
         lng: 28.9784,
         radar: {
-            climate: 45,      // Temperate
-            elevation: 30,    // Hilly coastal
-            coastal: 90,      // Bosphorus Strait
+            temperature: 45,      // Temperate
+            terrain: 30,    // Hilly coastal
+            coast: 90,      // Bosphorus Strait
             latitude: 48,     // Mid-latitude
-            urban: 95,        // Mega-city
-            rainfall: 50,     // Moderate
-            remoteness: 90    // Major crossroads
+            population: 95,        // Mega-city
+            precipitation: 50,     // Moderate
+            accessibility: 10,    // Major crossroads
+            development: 50,   // Default
+            tourism: 50,       // Default
+            wealth: 50         // Default
         }
     },
     {
@@ -430,13 +514,16 @@ const radarLocations = [
         lat: 61.2181,
         lng: -149.9003,
         radar: {
-            climate: 85,      // Cold subarctic
-            elevation: 45,    // Coastal mountains
-            coastal: 80,      // Cook Inlet
+            temperature: 85,      // Cold subarctic
+            terrain: 45,    // Coastal mountains
+            coast: 80,      // Cook Inlet
             latitude: 78,     // Subarctic
-            urban: 50,        // Medium city
-            rainfall: 45,     // Moderate
-            remoteness: 20    // Isolated
+            population: 50,        // Medium city
+            precipitation: 45,     // Moderate
+            accessibility: 80,    // Isolated
+            development: 50,   // Default
+            tourism: 50,       // Default
+            wealth: 50         // Default
         }
     },
     {
@@ -445,28 +532,34 @@ const radarLocations = [
         lat: 31.6295,
         lng: -7.9811,
         radar: {
-            climate: 15,      // Hot semi-arid
-            elevation: 50,    // Foothills
-            coastal: 20,      // Interior
+            temperature: 15,      // Hot semi-arid
+            terrain: 50,    // Foothills
+            coast: 20,      // Interior
             latitude: 36,     // Subtropical
-            urban: 70,        // Large city
-            rainfall: 15,     // Dry
-            remoteness: 65    // Regional hub
+            population: 70,        // Large city
+            precipitation: 15,     // Dry
+            accessibility: 35,    // Regional hub
+            development: 50,   // Default
+            tourism: 50,       // Default
+            wealth: 50         // Default
         }
     },
     {
         name: 'Yakutsk, Russia',
-        fact: 'Yakutsk is the coldest major city on Earth, with winter temperatures below -40°C.',
+        fact: 'Yakutsk is the coldest major city on Earth, with winter temperatures below -40Â°C.',
         lat: 62.0355,
         lng: 129.6755,
         radar: {
-            climate: 100,     // Extreme continental cold
-            elevation: 40,    // River valley
-            coastal: 0,       // Very inland
+            temperature: 100,     // Extreme continental cold
+            terrain: 40,    // River valley
+            coast: 0,       // Very inland
             latitude: 78,     // Subarctic
-            urban: 50,        // Medium city
-            rainfall: 20,     // Very dry
-            remoteness: 10    // Very isolated
+            population: 50,        // Medium city
+            precipitation: 20,     // Very dry
+            accessibility: 90,    // Very isolated
+            development: 50,   // Default
+            tourism: 50,       // Default
+            wealth: 50         // Default
         }
     },
     {
@@ -475,13 +568,16 @@ const radarLocations = [
         lat: 21.3099,
         lng: -157.8581,
         radar: {
-            climate: 20,      // Tropical warm
-            elevation: 15,    // Coastal plain
-            coastal: 100,     // Island
+            temperature: 20,      // Tropical warm
+            terrain: 15,    // Coastal plain
+            coast: 100,     // Island
             latitude: 25,     // Tropical
-            urban: 75,        // Large city
-            rainfall: 65,     // Moderate-wet
-            remoteness: 5     // Extremely isolated
+            population: 75,        // Large city
+            precipitation: 65,     // Moderate-wet
+            accessibility: 95,    // Extremely isolated
+            development: 50,   // Default
+            tourism: 50,       // Default
+            wealth: 50         // Default
         }
     },
     {
@@ -490,13 +586,16 @@ const radarLocations = [
         lat: -34.6037,
         lng: -58.3816,
         radar: {
-            climate: 35,      // Humid subtropical
-            elevation: 10,    // Coastal plain
-            coastal: 70,      // Río de la Plata
+            temperature: 35,      // Humid subtropical
+            terrain: 10,    // Coastal plain
+            coast: 70,      // RÃ­o de la Plata
             latitude: 40,     // Mid-latitude
-            urban: 95,        // Mega-city
-            rainfall: 55,     // Moderate
-            remoteness: 70    // Regional hub
+            population: 95,        // Mega-city
+            precipitation: 55,     // Moderate
+            accessibility: 30,    // Regional hub
+            development: 50,   // Default
+            tourism: 50,       // Default
+            wealth: 50         // Default
         }
     },
     {
@@ -505,13 +604,16 @@ const radarLocations = [
         lat: 9.0320,
         lng: 38.7469,
         radar: {
-            climate: 50,      // Highland temperate
-            elevation: 85,    // High plateau
-            coastal: 0,       // Very inland
+            temperature: 50,      // Highland temperate
+            terrain: 85,    // High plateau
+            coast: 0,       // Very inland
             latitude: 12,     // Tropical
-            urban: 80,        // Large city
-            rainfall: 60,     // Moderate (monsoon)
-            remoteness: 55    // Regional hub
+            population: 80,        // Large city
+            precipitation: 60,     // Moderate (monsoon)
+            accessibility: 45,    // Regional hub
+            development: 50,   // Default
+            tourism: 50,       // Default
+            wealth: 50         // Default
         }
     },
     {
@@ -520,13 +622,16 @@ const radarLocations = [
         lat: 64.1814,
         lng: -51.6941,
         radar: {
-            climate: 90,      // Arctic cold
-            elevation: 35,    // Fjord coast
-            coastal: 90,      // Atlantic coast
+            temperature: 90,      // Arctic cold
+            terrain: 35,    // Fjord coast
+            coast: 90,      // Atlantic coast
             latitude: 80,     // Subarctic
-            urban: 15,        // Small town
-            rainfall: 40,     // Moderate
-            remoteness: 5     // Extremely isolated
+            population: 15,        // Small town
+            precipitation: 40,     // Moderate
+            accessibility: 95,    // Extremely isolated
+            development: 50,   // Default
+            tourism: 50,       // Default
+            wealth: 50         // Default
         }
     },
     {
@@ -535,13 +640,16 @@ const radarLocations = [
         lat: 13.7563,
         lng: 100.5018,
         radar: {
-            climate: 10,      // Hot tropical
-            elevation: 5,     // River delta
-            coastal: 50,      // Near Gulf
+            temperature: 10,      // Hot tropical
+            terrain: 5,     // River delta
+            coast: 50,      // Near Gulf
             latitude: 16,     // Tropical
-            urban: 95,        // Mega-city
-            rainfall: 85,     // Very wet (monsoon)
-            remoteness: 85    // Major hub
+            population: 95,        // Mega-city
+            precipitation: 85,     // Very wet (monsoon)
+            accessibility: 15,    // Major hub
+            development: 50,   // Default
+            tourism: 50,       // Default
+            wealth: 50         // Default
         }
     },
     {
@@ -550,13 +658,16 @@ const radarLocations = [
         lat: 39.7392,
         lng: -104.9903,
         radar: {
-            climate: 50,      // Continental
-            elevation: 75,    // High plains/mountains
-            coastal: 0,       // Very inland
+            temperature: 50,      // Continental
+            terrain: 75,    // High plains/mountains
+            coast: 0,       // Very inland
             latitude: 46,     // Mid-latitude
-            urban: 80,        // Large city
-            rainfall: 20,     // Semi-arid
-            remoteness: 75    // Well connected
+            population: 80,        // Large city
+            precipitation: 20,     // Semi-arid
+            accessibility: 25,    // Well connected
+            development: 50,   // Default
+            tourism: 50,       // Default
+            wealth: 50         // Default
         }
     },
     {
@@ -565,28 +676,34 @@ const radarLocations = [
         lat: -31.9505,
         lng: 115.8605,
         radar: {
-            climate: 30,      // Mediterranean
-            elevation: 10,    // Coastal plain
-            coastal: 90,      // Indian Ocean
+            temperature: 30,      // Mediterranean
+            terrain: 10,    // Coastal plain
+            coast: 90,      // Indian Ocean
             latitude: 36,     // Mid-latitude
-            urban: 75,        // Large city
-            rainfall: 35,     // Dry summer
-            remoteness: 5     // Extremely isolated
+            population: 75,        // Large city
+            precipitation: 35,     // Dry summer
+            accessibility: 95,    // Extremely isolated
+            development: 50,   // Default
+            tourism: 50,       // Default
+            wealth: 50         // Default
         }
     },
     {
-        name: 'Bogotá, Colombia',
-        fact: 'Bogotá is the third-highest capital city in the world at 2,640m elevation.',
+        name: 'BogotÃ¡, Colombia',
+        fact: 'BogotÃ¡ is the third-highest capital city in the world at 2,640m elevation.',
         lat: 4.7110,
         lng: -74.0721,
         radar: {
-            climate: 55,      // Cool due to altitude
-            elevation: 80,    // High Andes plateau
-            coastal: 10,      // Inland mountain
+            temperature: 55,      // Cool due to altitude
+            terrain: 80,    // High Andes plateau
+            coast: 10,      // Inland mountain
             latitude: 8,      // Near equator
-            urban: 90,        // Mega-city
-            rainfall: 70,     // Wet
-            remoteness: 70    // Regional hub
+            population: 90,        // Mega-city
+            precipitation: 70,     // Wet
+            accessibility: 30,    // Regional hub
+            development: 50,   // Default
+            tourism: 50,       // Default
+            wealth: 50         // Default
         }
     },
     {
@@ -595,13 +712,16 @@ const radarLocations = [
         lat: 63.7467,
         lng: -68.5170,
         radar: {
-            climate: 95,      // Arctic cold
-            elevation: 25,    // Arctic coastal
-            coastal: 85,      // Frobisher Bay
+            temperature: 95,      // Arctic cold
+            terrain: 25,    // Arctic coastal
+            coast: 85,      // Frobisher Bay
             latitude: 82,     // Arctic
-            urban: 12,        // Small town
-            rainfall: 25,     // Arctic desert
-            remoteness: 5     // Extremely isolated
+            population: 12,        // Small town
+            precipitation: 25,     // Arctic desert
+            accessibility: 95,    // Extremely isolated
+            development: 50,   // Default
+            tourism: 50,       // Default
+            wealth: 50         // Default
         }
     },
     {
@@ -610,13 +730,16 @@ const radarLocations = [
         lat: 48.2082,
         lng: 16.3738,
         radar: {
-            climate: 60,      // Continental temperate
-            elevation: 25,    // Danube basin
-            coastal: 0,       // Very inland
+            temperature: 60,      // Continental temperate
+            terrain: 25,    // Danube basin
+            coast: 0,       // Very inland
             latitude: 55,     // Mid-latitude
-            urban: 80,        // Major city
-            rainfall: 50,     // Moderate
-            remoteness: 95    // Very central (Europe)
+            population: 80,        // Major city
+            precipitation: 50,     // Moderate
+            accessibility: 5,    // Very central (Europe)
+            development: 50,   // Default
+            tourism: 50,       // Default
+            wealth: 50         // Default
         }
     },
     {
@@ -625,13 +748,16 @@ const radarLocations = [
         lat: 33.5731,
         lng: -7.5898,
         radar: {
-            climate: 30,      // Mediterranean
-            elevation: 10,    // Coastal
-            coastal: 95,      // Atlantic coast
+            temperature: 30,      // Mediterranean
+            terrain: 10,    // Coastal
+            coast: 95,      // Atlantic coast
             latitude: 38,     // Subtropical
-            urban: 85,        // Large city
-            rainfall: 30,     // Dry
-            remoteness: 70    // Well connected
+            population: 85,        // Large city
+            precipitation: 30,     // Dry
+            accessibility: 30,    // Well connected
+            development: 50,   // Default
+            tourism: 50,       // Default
+            wealth: 50         // Default
         }
     },
     {
@@ -640,13 +766,16 @@ const radarLocations = [
         lat: 43.1155,
         lng: 131.8855,
         radar: {
-            climate: 70,      // Cold continental
-            elevation: 40,    // Hilly coast
-            coastal: 90,      // Pacific Ocean
+            temperature: 70,      // Cold continental
+            terrain: 40,    // Hilly coast
+            coast: 90,      // Pacific Ocean
             latitude: 50,     // Mid-latitude
-            urban: 60,        // Medium-large city
-            rainfall: 50,     // Moderate
-            remoteness: 35    // Isolated but connected
+            population: 60,        // Medium-large city
+            precipitation: 50,     // Moderate
+            accessibility: 65,    // Isolated but connected
+            development: 50,   // Default
+            tourism: 50,       // Default
+            wealth: 50         // Default
         }
     },
     {
@@ -655,13 +784,16 @@ const radarLocations = [
         lat: 19.4326,
         lng: -99.1332,
         radar: {
-            climate: 45,      // Mild highland
-            elevation: 85,    // High valley
-            coastal: 5,       // Very inland
+            temperature: 45,      // Mild highland
+            terrain: 85,    // High valley
+            coast: 5,       // Very inland
             latitude: 22,     // Tropical
-            urban: 100,       // Mega-city
-            rainfall: 55,     // Moderate
-            remoteness: 80    // Major hub
+            population: 100,       // Mega-city
+            precipitation: 55,     // Moderate
+            accessibility: 20,    // Major hub
+            development: 50,   // Default
+            tourism: 50,       // Default
+            wealth: 50         // Default
         }
     },
     {
@@ -670,13 +802,16 @@ const radarLocations = [
         lat: -6.1659,
         lng: 39.2026,
         radar: {
-            climate: 15,      // Hot tropical
-            elevation: 5,     // Island lowland
-            coastal: 100,     // Island
+            temperature: 15,      // Hot tropical
+            terrain: 5,     // Island lowland
+            coast: 100,     // Island
             latitude: 8,      // Near equator
-            urban: 35,        // Medium town
-            rainfall: 80,     // Wet tropical
-            remoteness: 30    // Island isolation
+            population: 35,        // Medium town
+            precipitation: 80,     // Wet tropical
+            accessibility: 70,    // Island isolation
+            development: 50,   // Default
+            tourism: 50,       // Default
+            wealth: 50         // Default
         }
     },
     {
@@ -685,13 +820,16 @@ const radarLocations = [
         lat: -34.9011,
         lng: -56.1645,
         radar: {
-            climate: 40,      // Temperate
-            elevation: 10,    // Coastal plain
-            coastal: 90,      // Río de la Plata
+            temperature: 40,      // Temperate
+            terrain: 10,    // Coastal plain
+            coast: 90,      // RÃ­o de la Plata
             latitude: 40,     // Mid-latitude
-            urban: 75,        // Large city
-            rainfall: 50,     // Moderate
-            remoteness: 60    // Regional hub
+            population: 75,        // Large city
+            precipitation: 50,     // Moderate
+            accessibility: 40,    // Regional hub
+            development: 50,   // Default
+            tourism: 50,       // Default
+            wealth: 50         // Default
         }
     },
     {
@@ -700,13 +838,16 @@ const radarLocations = [
         lat: 35.0116,
         lng: 135.7681,
         radar: {
-            climate: 45,      // Temperate
-            elevation: 35,    // Basin with mountains
-            coastal: 30,      // Inland but near sea
+            temperature: 45,      // Temperate
+            terrain: 35,    // Basin with mountains
+            coast: 30,      // Inland but near sea
             latitude: 42,     // Mid-latitude
-            urban: 75,        // Large city
-            rainfall: 70,     // Humid subtropical
-            remoteness: 85    // Well connected
+            population: 75,        // Large city
+            precipitation: 70,     // Humid subtropical
+            accessibility: 15,    // Well connected
+            development: 50,   // Default
+            tourism: 50,       // Default
+            wealth: 50         // Default
         }
     },
     {
@@ -715,28 +856,34 @@ const radarLocations = [
         lat: 64.1466,
         lng: -21.9426,
         radar: {
-            climate: 80,      // Cool oceanic
-            elevation: 15,    // Coastal plain
-            coastal: 95,      // Atlantic coast
+            temperature: 80,      // Cool oceanic
+            terrain: 15,    // Coastal plain
+            coast: 95,      // Atlantic coast
             latitude: 80,     // Subarctic
-            urban: 45,        // Medium city
-            rainfall: 65,     // Moderate-wet
-            remoteness: 25    // Isolated
+            population: 45,        // Medium city
+            precipitation: 65,     // Moderate-wet
+            accessibility: 75,    // Isolated
+            development: 50,   // Default
+            tourism: 50,       // Default
+            wealth: 50         // Default
         }
     },
     {
-        name: 'Medellín, Colombia',
-        fact: 'Medellín is known as the "City of Eternal Spring" for its year-round mild weather.',
+        name: 'MedellÃ­n, Colombia',
+        fact: 'MedellÃ­n is known as the "City of Eternal Spring" for its year-round mild weather.',
         lat: 6.2476,
         lng: -75.5658,
         radar: {
-            climate: 50,      // Mild highland
-            elevation: 75,    // Andean valley
-            coastal: 10,      // Inland mountain
+            temperature: 50,      // Mild highland
+            terrain: 75,    // Andean valley
+            coast: 10,      // Inland mountain
             latitude: 8,      // Near equator
-            urban: 85,        // Large city
-            rainfall: 75,     // Wet tropical
-            remoteness: 65    // Regional hub
+            population: 85,        // Large city
+            precipitation: 75,     // Wet tropical
+            accessibility: 35,    // Regional hub
+            development: 50,   // Default
+            tourism: 50,       // Default
+            wealth: 50         // Default
         }
     },
     {
@@ -745,13 +892,16 @@ const radarLocations = [
         lat: 38.7223,
         lng: -9.1393,
         radar: {
-            climate: 35,      // Mediterranean
-            elevation: 40,    // Hilly coast
-            coastal: 95,      // Atlantic coast
+            temperature: 35,      // Mediterranean
+            terrain: 40,    // Hilly coast
+            coast: 95,      // Atlantic coast
             latitude: 45,     // Mid-latitude
-            urban: 80,        // Large city
-            rainfall: 40,     // Dry summer
-            remoteness: 80    // Well connected
+            population: 80,        // Large city
+            precipitation: 40,     // Dry summer
+            accessibility: 20,    // Well connected
+            development: 50,   // Default
+            tourism: 50,       // Default
+            wealth: 50         // Default
         }
     },
     {
@@ -760,13 +910,16 @@ const radarLocations = [
         lat: -53.1638,
         lng: -70.9171,
         radar: {
-            climate: 75,      // Cold oceanic
-            elevation: 20,    // Coastal plains
-            coastal: 90,      // Strait of Magellan
+            temperature: 75,      // Cold oceanic
+            terrain: 20,    // Coastal plains
+            coast: 90,      // Strait of Magellan
             latitude: 68,     // Subantarctic
-            urban: 30,        // Medium city
-            rainfall: 45,     // Moderate
-            remoteness: 15    // Very isolated
+            population: 30,        // Medium city
+            precipitation: 45,     // Moderate
+            accessibility: 85,    // Very isolated
+            development: 50,   // Default
+            tourism: 50,       // Default
+            wealth: 50         // Default
         }
     },
     {
@@ -775,13 +928,16 @@ const radarLocations = [
         lat: -41.2865,
         lng: 174.7762,
         radar: {
-            climate: 55,      // Cool temperate
-            elevation: 40,    // Hilly coast
-            coastal: 95,      // Harbor
+            temperature: 55,      // Cool temperate
+            terrain: 40,    // Hilly coast
+            coast: 95,      // Harbor
             latitude: 48,     // Mid-latitude
-            urban: 65,        // Large city
-            rainfall: 65,     // Wet
-            remoteness: 20    // Very isolated
+            population: 65,        // Large city
+            precipitation: 65,     // Wet
+            accessibility: 80,    // Very isolated
+            development: 50,   // Default
+            tourism: 50,       // Default
+            wealth: 50         // Default
         }
     },
     {
@@ -790,13 +946,16 @@ const radarLocations = [
         lat: -13.5319,
         lng: -71.9675,
         radar: {
-            climate: 60,      // Cool highland
-            elevation: 90,    // High Andes
-            coastal: 5,       // Very inland
+            temperature: 60,      // Cool highland
+            terrain: 90,    // High Andes
+            coast: 5,       // Very inland
             latitude: 16,     // Tropical
-            urban: 55,        // Medium city
-            rainfall: 40,     // Semi-arid
-            remoteness: 35    // Isolated
+            population: 55,        // Medium city
+            precipitation: 40,     // Semi-arid
+            accessibility: 65,    // Isolated
+            development: 50,   // Default
+            tourism: 50,       // Default
+            wealth: 50         // Default
         }
     },
     {
@@ -805,13 +964,16 @@ const radarLocations = [
         lat: 41.7151,
         lng: 44.8271,
         radar: {
-            climate: 50,      // Continental
-            elevation: 55,    // Valley in mountains
-            coastal: 10,      // Inland
+            temperature: 50,      // Continental
+            terrain: 55,    // Valley in mountains
+            coast: 10,      // Inland
             latitude: 48,     // Mid-latitude
-            urban: 70,        // Large city
-            rainfall: 45,     // Moderate
-            remoteness: 55    // Regional hub
+            population: 70,        // Large city
+            precipitation: 45,     // Moderate
+            accessibility: 45,    // Regional hub
+            development: 50,   // Default
+            tourism: 50,       // Default
+            wealth: 50         // Default
         }
     },
     {
@@ -820,28 +982,34 @@ const radarLocations = [
         lat: 14.7167,
         lng: -17.4677,
         radar: {
-            climate: 20,      // Hot tropical
-            elevation: 10,    // Coastal plain
-            coastal: 95,      // Atlantic peninsula
+            temperature: 20,      // Hot tropical
+            terrain: 10,    // Coastal plain
+            coast: 95,      // Atlantic peninsula
             latitude: 18,     // Tropical
-            urban: 75,        // Large city
-            rainfall: 35,     // Dry season
-            remoteness: 60    // Regional hub
+            population: 75,        // Large city
+            precipitation: 35,     // Dry season
+            accessibility: 40,    // Regional hub
+            development: 50,   // Default
+            tourism: 50,       // Default
+            wealth: 50         // Default
         }
     },
     {
         name: 'Fairbanks, Alaska',
-        fact: 'Fairbanks experiences temperature extremes from -50°C in winter to +35°C in summer.',
+        fact: 'Fairbanks experiences temperature extremes from -50Â°C in winter to +35Â°C in summer.',
         lat: 64.8378,
         lng: -147.7164,
         radar: {
-            climate: 95,      // Extreme continental
-            elevation: 40,    // River valley
-            coastal: 0,       // Very inland
+            temperature: 95,      // Extreme continental
+            terrain: 40,    // River valley
+            coast: 0,       // Very inland
             latitude: 81,     // Subarctic
-            urban: 25,        // Small city
-            rainfall: 20,     // Very dry
-            remoteness: 15    // Very isolated
+            population: 25,        // Small city
+            precipitation: 20,     // Very dry
+            accessibility: 85,    // Very isolated
+            development: 50,   // Default
+            tourism: 50,       // Default
+            wealth: 50         // Default
         }
     },
     {
@@ -850,13 +1018,16 @@ const radarLocations = [
         lat: 56.9496,
         lng: 24.1052,
         radar: {
-            climate: 75,      // Continental cold
-            elevation: 10,    // Coastal plain
-            coastal: 75,      // Baltic Sea
+            temperature: 75,      // Continental cold
+            terrain: 10,    // Coastal plain
+            coast: 75,      // Baltic Sea
             latitude: 70,     // Northern
-            urban: 65,        // Large city
-            rainfall: 50,     // Moderate
-            remoteness: 80    // Well connected
+            population: 65,        // Large city
+            precipitation: 50,     // Moderate
+            accessibility: 20,    // Well connected
+            development: 50,   // Default
+            tourism: 50,       // Default
+            wealth: 50         // Default
         }
     },
     {
@@ -865,13 +1036,16 @@ const radarLocations = [
         lat: 27.7172,
         lng: 85.3240,
         radar: {
-            climate: 55,      // Mild highland
-            elevation: 85,    // Himalayan valley
-            coastal: 0,       // Very inland
+            temperature: 55,      // Mild highland
+            terrain: 85,    // Himalayan valley
+            coast: 0,       // Very inland
             latitude: 32,     // Subtropical
-            urban: 75,        // Large city
-            rainfall: 75,     // Monsoon wet
-            remoteness: 40    // Isolated
+            population: 75,        // Large city
+            precipitation: 75,     // Monsoon wet
+            accessibility: 60,    // Isolated
+            development: 50,   // Default
+            tourism: 50,       // Default
+            wealth: 50         // Default
         }
     },
     {
@@ -880,13 +1054,16 @@ const radarLocations = [
         lat: -43.5321,
         lng: 172.6362,
         radar: {
-            climate: 55,      // Temperate oceanic
-            elevation: 15,    // Canterbury Plains
-            coastal: 80,      // Pacific coast
+            temperature: 55,      // Temperate oceanic
+            terrain: 15,    // Canterbury Plains
+            coast: 80,      // Pacific coast
             latitude: 50,     // Mid-latitude
-            urban: 60,        // Large city
-            rainfall: 50,     // Moderate
-            remoteness: 20    // Very isolated
+            population: 60,        // Large city
+            precipitation: 50,     // Moderate
+            accessibility: 80,    // Very isolated
+            development: 50,   // Default
+            tourism: 50,       // Default
+            wealth: 50         // Default
         }
     },
     {
@@ -895,13 +1072,16 @@ const radarLocations = [
         lat: 12.3714,
         lng: -1.5197,
         radar: {
-            climate: 10,      // Hot semi-arid
-            elevation: 30,    // Plateau
-            coastal: 0,       // Very inland
+            temperature: 10,      // Hot semi-arid
+            terrain: 30,    // Plateau
+            coast: 0,       // Very inland
             latitude: 15,     // Tropical
-            urban: 65,        // Large city
-            rainfall: 30,     // Dry
-            remoteness: 45    // Moderate
+            population: 65,        // Large city
+            precipitation: 30,     // Dry
+            accessibility: 55,    // Moderate
+            development: 50,   // Default
+            tourism: 50,       // Default
+            wealth: 50         // Default
         }
     },
     {
@@ -910,13 +1090,16 @@ const radarLocations = [
         lat: 59.4370,
         lng: 24.7536,
         radar: {
-            climate: 80,      // Cold continental
-            elevation: 15,    // Coastal plain
-            coastal: 85,      // Baltic Sea
+            temperature: 80,      // Cold continental
+            terrain: 15,    // Coastal plain
+            coast: 85,      // Baltic Sea
             latitude: 74,     // Northern
-            urban: 60,        // Large city
-            rainfall: 50,     // Moderate
-            remoteness: 75    // Well connected
+            population: 60,        // Large city
+            precipitation: 50,     // Moderate
+            accessibility: 25,    // Well connected
+            development: 50,   // Default
+            tourism: 50,       // Default
+            wealth: 50         // Default
         }
     },
     {
@@ -925,13 +1108,16 @@ const radarLocations = [
         lat: 20.6597,
         lng: -103.3496,
         radar: {
-            climate: 40,      // Subtropical highland
-            elevation: 70,    // High plateau
-            coastal: 15,      // Inland
+            temperature: 40,      // Subtropical highland
+            terrain: 70,    // High plateau
+            coast: 15,      // Inland
             latitude: 24,     // Tropical
-            urban: 85,        // Large city
-            rainfall: 50,     // Moderate
-            remoteness: 75    // Well connected
+            population: 85,        // Large city
+            precipitation: 50,     // Moderate
+            accessibility: 25,    // Well connected
+            development: 50,   // Default
+            tourism: 50,       // Default
+            wealth: 50         // Default
         }
     },
     {
@@ -940,13 +1126,16 @@ const radarLocations = [
         lat: -42.8821,
         lng: 147.3272,
         radar: {
-            climate: 60,      // Cool oceanic
-            elevation: 35,    // Coastal hills
-            coastal: 90,      // Derwent River
+            temperature: 60,      // Cool oceanic
+            terrain: 35,    // Coastal hills
+            coast: 90,      // Derwent River
             latitude: 50,     // Mid-latitude
-            urban: 40,        // Medium city
-            rainfall: 55,     // Moderate
-            remoteness: 25    // Isolated
+            population: 40,        // Medium city
+            precipitation: 55,     // Moderate
+            accessibility: 75,    // Isolated
+            development: 50,   // Default
+            tourism: 50,       // Default
+            wealth: 50         // Default
         }
     },
     {
@@ -955,13 +1144,16 @@ const radarLocations = [
         lat: 40.1792,
         lng: 44.4991,
         radar: {
-            climate: 55,      // Continental
-            elevation: 65,    // Highland plateau
-            coastal: 0,       // Very inland
+            temperature: 55,      // Continental
+            terrain: 65,    // Highland plateau
+            coast: 0,       // Very inland
             latitude: 46,     // Mid-latitude
-            urban: 70,        // Large city
-            rainfall: 25,     // Semi-arid
-            remoteness: 50    // Regional hub
+            population: 70,        // Large city
+            precipitation: 25,     // Semi-arid
+            accessibility: 50,    // Regional hub
+            development: 50,   // Default
+            tourism: 50,       // Default
+            wealth: 50         // Default
         }
     },
     {
@@ -970,13 +1162,16 @@ const radarLocations = [
         lat: 41.1579,
         lng: -8.6291,
         radar: {
-            climate: 40,      // Mediterranean
-            elevation: 40,    // Hilly coast
-            coastal: 90,      // Atlantic coast
+            temperature: 40,      // Mediterranean
+            terrain: 40,    // Hilly coast
+            coast: 90,      // Atlantic coast
             latitude: 48,     // Mid-latitude
-            urban: 70,        // Large city
-            rainfall: 60,     // Wet winter
-            remoteness: 75    // Well connected
+            population: 70,        // Large city
+            precipitation: 60,     // Wet winter
+            accessibility: 25,    // Well connected
+            development: 50,   // Default
+            tourism: 50,       // Default
+            wealth: 50         // Default
         }
     },
     {
@@ -985,13 +1180,16 @@ const radarLocations = [
         lat: 24.8607,
         lng: 67.0011,
         radar: {
-            climate: 15,      // Hot desert
-            elevation: 10,    // Coastal plain
-            coastal: 95,      // Arabian Sea
+            temperature: 15,      // Hot desert
+            terrain: 10,    // Coastal plain
+            coast: 95,      // Arabian Sea
             latitude: 28,     // Subtropical
-            urban: 100,       // Mega-city
-            rainfall: 15,     // Very dry
-            remoteness: 75    // Major hub
+            population: 100,       // Mega-city
+            precipitation: 15,     // Very dry
+            accessibility: 25,    // Major hub
+            development: 50,   // Default
+            tourism: 50,       // Default
+            wealth: 50         // Default
         }
     },
     {
@@ -1000,13 +1198,16 @@ const radarLocations = [
         lat: -18.8792,
         lng: 47.5079,
         radar: {
-            climate: 45,      // Subtropical highland
-            elevation: 75,    // High plateau
-            coastal: 20,      // Interior island
+            temperature: 45,      // Subtropical highland
+            terrain: 75,    // High plateau
+            coast: 20,      // Interior island
             latitude: 22,     // Tropical
-            urban: 65,        // Large city
-            rainfall: 65,     // Wet season
-            remoteness: 30    // Island isolation
+            population: 65,        // Large city
+            precipitation: 65,     // Wet season
+            accessibility: 70,    // Island isolation
+            development: 50,   // Default
+            tourism: 50,       // Default
+            wealth: 50         // Default
         }
     },
     {
@@ -1015,13 +1216,16 @@ const radarLocations = [
         lat: 3.1390,
         lng: 101.6869,
         radar: {
-            climate: 10,      // Hot tropical
-            elevation: 15,    // River valley
-            coastal: 40,      // Near coast
+            temperature: 10,      // Hot tropical
+            terrain: 15,    // River valley
+            coast: 40,      // Near coast
             latitude: 5,      // Near equator
-            urban: 95,        // Mega-city
-            rainfall: 95,     // Extremely wet
-            remoteness: 90    // Major hub
+            population: 95,        // Mega-city
+            precipitation: 95,     // Extremely wet
+            accessibility: 10,    // Major hub
+            development: 50,   // Default
+            tourism: 50,       // Default
+            wealth: 50         // Default
         }
     },
     {
@@ -1030,13 +1234,16 @@ const radarLocations = [
         lat: -33.4489,
         lng: -70.6693,
         radar: {
-            climate: 45,      // Mediterranean
-            elevation: 60,    // Andean valley
-            coastal: 20,      // Inland near coast
+            temperature: 45,      // Mediterranean
+            terrain: 60,    // Andean valley
+            coast: 20,      // Inland near coast
             latitude: 38,     // Mid-latitude
-            urban: 90,        // Mega-city
-            rainfall: 30,     // Dry summer
-            remoteness: 65    // Regional hub
+            population: 90,        // Mega-city
+            precipitation: 30,     // Dry summer
+            accessibility: 35,    // Regional hub
+            development: 50,   // Default
+            tourism: 50,       // Default
+            wealth: 50         // Default
         }
     },
     {
@@ -1045,13 +1252,16 @@ const radarLocations = [
         lat: 63.8757,
         lng: -22.6761,
         radar: {
-            climate: 80,      // Cold oceanic
-            elevation: 25,    // Coastal lava fields
-            coastal: 100,     // Peninsula
+            temperature: 80,      // Cold oceanic
+            terrain: 25,    // Coastal lava fields
+            coast: 100,     // Peninsula
             latitude: 80,     // Subarctic
-            urban: 15,        // Rural
-            rainfall: 70,     // Wet
-            remoteness: 20    // Isolated
+            population: 15,        // Rural
+            precipitation: 70,     // Wet
+            accessibility: 80,    // Isolated
+            development: 50,   // Default
+            tourism: 50,       // Default
+            wealth: 50         // Default
         }
     },
     {
@@ -1060,13 +1270,16 @@ const radarLocations = [
         lat: -12.9714,
         lng: -38.5014,
         radar: {
-            climate: 20,      // Hot tropical
-            elevation: 20,    // Coastal hills
-            coastal: 95,      // Atlantic coast
+            temperature: 20,      // Hot tropical
+            terrain: 20,    // Coastal hills
+            coast: 95,      // Atlantic coast
             latitude: 15,     // Tropical
-            urban: 80,        // Large city
-            rainfall: 80,     // Very wet
-            remoteness: 65    // Regional hub
+            population: 80,        // Large city
+            precipitation: 80,     // Very wet
+            accessibility: 35,    // Regional hub
+            development: 50,   // Default
+            tourism: 50,       // Default
+            wealth: 50         // Default
         }
     },
     {
@@ -1075,28 +1288,34 @@ const radarLocations = [
         lat: 50.0647,
         lng: 19.9450,
         radar: {
-            climate: 65,      // Continental temperate
-            elevation: 30,    // River valley
-            coastal: 0,       // Very inland
+            temperature: 65,      // Continental temperate
+            terrain: 30,    // River valley
+            coast: 0,       // Very inland
             latitude: 56,     // Mid-latitude
-            urban: 70,        // Large city
-            rainfall: 50,     // Moderate
-            remoteness: 85    // Well connected
+            population: 70,        // Large city
+            precipitation: 50,     // Moderate
+            accessibility: 15,    // Well connected
+            development: 50,   // Default
+            tourism: 50,       // Default
+            wealth: 50         // Default
         }
     },
     {
-        name: 'Tromsø, Norway',
-        fact: 'Tromsø is known as the "Paris of the North" and has midnight sun for months.',
+        name: 'TromsÃ¸, Norway',
+        fact: 'TromsÃ¸ is known as the "Paris of the North" and has midnight sun for months.',
         lat: 69.6492,
         lng: 18.9553,
         radar: {
-            climate: 85,      // Subarctic
-            elevation: 35,    // Coastal mountains
-            coastal: 90,      // Fjord coast
+            temperature: 85,      // Subarctic
+            terrain: 35,    // Coastal mountains
+            coast: 90,      // Fjord coast
             latitude: 88,     // Arctic
-            urban: 35,        // Medium city
-            rainfall: 60,     // Moderate
-            remoteness: 25    // Isolated
+            population: 35,        // Medium city
+            precipitation: 60,     // Moderate
+            accessibility: 75,    // Isolated
+            development: 50,   // Default
+            tourism: 50,       // Default
+            wealth: 50         // Default
         }
     },
     {
@@ -1105,13 +1324,16 @@ const radarLocations = [
         lat: 19.0414,
         lng: -98.2063,
         radar: {
-            climate: 45,      // Subtropical highland
-            elevation: 75,    // High valley
-            coastal: 10,      // Inland
+            temperature: 45,      // Subtropical highland
+            terrain: 75,    // High valley
+            coast: 10,      // Inland
             latitude: 22,     // Tropical
-            urban: 75,        // Large city
-            rainfall: 50,     // Moderate
-            remoteness: 80    // Well connected
+            population: 75,        // Large city
+            precipitation: 50,     // Moderate
+            accessibility: 20,    // Well connected
+            development: 50,   // Default
+            tourism: 50,       // Default
+            wealth: 50         // Default
         }
     },
     {
@@ -1120,13 +1342,16 @@ const radarLocations = [
         lat: 41.2995,
         lng: 69.2401,
         radar: {
-            climate: 55,      // Continental
-            elevation: 50,    // Plateau
-            coastal: 0,       // Very inland
+            temperature: 55,      // Continental
+            terrain: 50,    // Plateau
+            coast: 0,       // Very inland
             latitude: 48,     // Mid-latitude
-            urban: 80,        // Large city
-            rainfall: 25,     // Semi-arid
-            remoteness: 60    // Regional hub
+            population: 80,        // Large city
+            precipitation: 25,     // Semi-arid
+            accessibility: 40,    // Regional hub
+            development: 50,   // Default
+            tourism: 50,       // Default
+            wealth: 50         // Default
         }
     },
     {
@@ -1135,13 +1360,16 @@ const radarLocations = [
         lat: -17.8252,
         lng: 31.0335,
         radar: {
-            climate: 45,      // Subtropical highland
-            elevation: 75,    // High plateau
-            coastal: 0,       // Very inland
+            temperature: 45,      // Subtropical highland
+            terrain: 75,    // High plateau
+            coast: 0,       // Very inland
             latitude: 21,     // Tropical
-            urban: 70,        // Large city
-            rainfall: 45,     // Moderate
-            remoteness: 45    // Moderate
+            population: 70,        // Large city
+            precipitation: 45,     // Moderate
+            accessibility: 55,    // Moderate
+            development: 50,   // Default
+            tourism: 50,       // Default
+            wealth: 50         // Default
         }
     },
     {
@@ -1150,13 +1378,16 @@ const radarLocations = [
         lat: 25.0330,
         lng: 121.5654,
         radar: {
-            climate: 30,      // Humid subtropical
-            elevation: 25,    // Basin
-            coastal: 70,      // Near coast
+            temperature: 30,      // Humid subtropical
+            terrain: 25,    // Basin
+            coast: 70,      // Near coast
             latitude: 28,     // Subtropical
-            urban: 95,        // Mega-city
-            rainfall: 90,     // Very wet
-            remoteness: 85    // Major hub
+            population: 95,        // Mega-city
+            precipitation: 90,     // Very wet
+            accessibility: 15,    // Major hub
+            development: 50,   // Default
+            tourism: 50,       // Default
+            wealth: 50         // Default
         }
     },
     {
@@ -1165,13 +1396,16 @@ const radarLocations = [
         lat: 10.3910,
         lng: -75.4794,
         radar: {
-            climate: 15,      // Hot tropical
-            elevation: 5,     // Coastal plain
-            coastal: 100,     // Caribbean coast
+            temperature: 15,      // Hot tropical
+            terrain: 5,     // Coastal plain
+            coast: 100,     // Caribbean coast
             latitude: 12,     // Tropical
-            urban: 65,        // Large city
-            rainfall: 60,     // Moderate-wet
-            remoteness: 55    // Regional hub
+            population: 65,        // Large city
+            precipitation: 60,     // Moderate-wet
+            accessibility: 45,    // Regional hub
+            development: 50,   // Default
+            tourism: 50,       // Default
+            wealth: 50         // Default
         }
     },
     {
@@ -1180,13 +1414,16 @@ const radarLocations = [
         lat: 42.6507,
         lng: 18.0944,
         radar: {
-            climate: 40,      // Mediterranean
-            elevation: 35,    // Coastal hills
-            coastal: 95,      // Adriatic coast
+            temperature: 40,      // Mediterranean
+            terrain: 35,    // Coastal hills
+            coast: 95,      // Adriatic coast
             latitude: 49,     // Mid-latitude
-            urban: 30,        // Medium city
-            rainfall: 55,     // Moderate
-            remoteness: 60    // Well connected
+            population: 30,        // Medium city
+            precipitation: 55,     // Moderate
+            accessibility: 40,    // Well connected
+            development: 50,   // Default
+            tourism: 50,       // Default
+            wealth: 50         // Default
         }
     },
     {
@@ -1195,13 +1432,16 @@ const radarLocations = [
         lat: 43.2220,
         lng: 76.8512,
         radar: {
-            climate: 60,      // Continental
-            elevation: 70,    // Mountain foothills
-            coastal: 0,       // Very inland
+            temperature: 60,      // Continental
+            terrain: 70,    // Mountain foothills
+            coast: 0,       // Very inland
             latitude: 50,     // Mid-latitude
-            urban: 75,        // Large city
-            rainfall: 35,     // Semi-arid
-            remoteness: 55    // Regional hub
+            population: 75,        // Large city
+            precipitation: 35,     // Semi-arid
+            accessibility: 45,    // Regional hub
+            development: 50,   // Default
+            tourism: 50,       // Default
+            wealth: 50         // Default
         }
     },
     {
@@ -1210,13 +1450,16 @@ const radarLocations = [
         lat: -12.4634,
         lng: 130.8456,
         radar: {
-            climate: 15,      // Hot tropical
-            elevation: 10,    // Coastal plain
-            coastal: 90,      // Timor Sea
+            temperature: 15,      // Hot tropical
+            terrain: 10,    // Coastal plain
+            coast: 90,      // Timor Sea
             latitude: 15,     // Tropical
-            urban: 35,        // Medium city
-            rainfall: 75,     // Wet season monsoon
-            remoteness: 20    // Very isolated
+            population: 35,        // Medium city
+            precipitation: 75,     // Wet season monsoon
+            accessibility: 80,    // Very isolated
+            development: 50,   // Default
+            tourism: 50,       // Default
+            wealth: 50         // Default
         }
     },
     {
@@ -1225,13 +1468,16 @@ const radarLocations = [
         lat: 17.0654,
         lng: -96.7236,
         radar: {
-            climate: 40,      // Subtropical highland
-            elevation: 70,    // Valley in mountains
-            coastal: 15,      // Inland near coast
+            temperature: 40,      // Subtropical highland
+            terrain: 70,    // Valley in mountains
+            coast: 15,      // Inland near coast
             latitude: 20,     // Tropical
-            urban: 55,        // Medium city
-            rainfall: 45,     // Moderate
-            remoteness: 55    // Regional hub
+            population: 55,        // Medium city
+            precipitation: 45,     // Moderate
+            accessibility: 45,    // Regional hub
+            development: 50,   // Default
+            tourism: 50,       // Default
+            wealth: 50         // Default
         }
     },
     {
@@ -1240,13 +1486,16 @@ const radarLocations = [
         lat: 43.5081,
         lng: 16.4402,
         radar: {
-            climate: 40,      // Mediterranean
-            elevation: 30,    // Coastal hills
-            coastal: 95,      // Adriatic coast
+            temperature: 40,      // Mediterranean
+            terrain: 30,    // Coastal hills
+            coast: 95,      // Adriatic coast
             latitude: 50,     // Mid-latitude
-            urban: 50,        // Medium city
-            rainfall: 50,     // Moderate
-            remoteness: 70    // Well connected
+            population: 50,        // Medium city
+            precipitation: 50,     // Moderate
+            accessibility: 30,    // Well connected
+            development: 50,   // Default
+            tourism: 50,       // Default
+            wealth: 50         // Default
         }
     },
     {
@@ -1255,13 +1504,16 @@ const radarLocations = [
         lat: 15.3229,
         lng: 38.9251,
         radar: {
-            climate: 45,      // Highland tropical
-            elevation: 80,    // High plateau
-            coastal: 15,      // Inland near coast
+            temperature: 45,      // Highland tropical
+            terrain: 80,    // High plateau
+            coast: 15,      // Inland near coast
             latitude: 18,     // Tropical
-            urban: 50,        // Medium city
-            rainfall: 30,     // Semi-arid
-            remoteness: 30    // Isolated
+            population: 50,        // Medium city
+            precipitation: 30,     // Semi-arid
+            accessibility: 70,    // Isolated
+            development: 50,   // Default
+            tourism: 50,       // Default
+            wealth: 50         // Default
         }
     },
     {
@@ -1270,13 +1522,16 @@ const radarLocations = [
         lat: 55.9533,
         lng: -3.1883,
         radar: {
-            climate: 70,      // Cool oceanic
-            elevation: 40,    // Hilly terrain
-            coastal: 65,      // North Sea
+            temperature: 70,      // Cool oceanic
+            terrain: 40,    // Hilly terrain
+            coast: 65,      // North Sea
             latitude: 68,     // Northern
-            urban: 70,        // Large city
-            rainfall: 65,     // Wet
-            remoteness: 85    // Well connected
+            population: 70,        // Large city
+            precipitation: 65,     // Wet
+            accessibility: 15,    // Well connected
+            development: 50,   // Default
+            tourism: 50,       // Default
+            wealth: 50         // Default
         }
     },
     {
@@ -1285,43 +1540,52 @@ const radarLocations = [
         lat: 18.7883,
         lng: 98.9853,
         radar: {
-            climate: 25,      // Warm tropical highland
-            elevation: 50,    // Valley in mountains
-            coastal: 0,       // Very inland
+            temperature: 25,      // Warm tropical highland
+            terrain: 50,    // Valley in mountains
+            coast: 0,       // Very inland
             latitude: 22,     // Tropical
-            urban: 60,        // Large city
-            rainfall: 75,     // Monsoon wet
-            remoteness: 65    // Regional hub
+            population: 60,        // Large city
+            precipitation: 75,     // Monsoon wet
+            accessibility: 35,    // Regional hub
+            development: 50,   // Default
+            tourism: 50,       // Default
+            wealth: 50         // Default
         }
     },
     {
-        name: 'Valparaíso, Chile',
-        fact: 'Valparaíso is built on 42 hills overlooking the Pacific Ocean.',
+        name: 'ValparaÃ­so, Chile',
+        fact: 'ValparaÃ­so is built on 42 hills overlooking the Pacific Ocean.',
         lat: -33.0472,
         lng: -71.6127,
         radar: {
-            climate: 40,      // Mediterranean
-            elevation: 55,    // Steep coastal hills
-            coastal: 100,     // Pacific coast
+            temperature: 40,      // Mediterranean
+            terrain: 55,    // Steep coastal hills
+            coast: 100,     // Pacific coast
             latitude: 38,     // Mid-latitude
-            urban: 55,        // Medium city
-            rainfall: 30,     // Dry summer
-            remoteness: 60    // Well connected
+            population: 55,        // Medium city
+            precipitation: 30,     // Dry summer
+            accessibility: 40,    // Well connected
+            development: 50,   // Default
+            tourism: 50,       // Default
+            wealth: 50         // Default
         }
     },
     {
-        name: 'Brasília, Brazil',
-        fact: 'Brasília was built from scratch in just 41 months to be Brazil\'s new capital.',
+        name: 'BrasÃ­lia, Brazil',
+        fact: 'BrasÃ­lia was built from scratch in just 41 months to be Brazil\'s new capital.',
         lat: -15.8267,
         lng: -47.9218,
         radar: {
-            climate: 30,      // Tropical savanna
-            elevation: 65,    // Central plateau
-            coastal: 0,       // Very inland
+            temperature: 30,      // Tropical savanna
+            terrain: 65,    // Central plateau
+            coast: 0,       // Very inland
             latitude: 18,     // Tropical
-            urban: 85,        // Large city
-            rainfall: 70,     // Wet season
-            remoteness: 70    // Well connected
+            population: 85,        // Large city
+            precipitation: 70,     // Wet season
+            accessibility: 30,    // Well connected
+            development: 50,   // Default
+            tourism: 50,       // Default
+            wealth: 50         // Default
         }
     },
     {
@@ -1330,13 +1594,16 @@ const radarLocations = [
         lat: 23.5880,
         lng: 58.3829,
         radar: {
-            climate: 10,      // Hot desert
-            elevation: 40,    // Coastal mountains
-            coastal: 95,      // Gulf of Oman
+            temperature: 10,      // Hot desert
+            terrain: 40,    // Coastal mountains
+            coast: 95,      // Gulf of Oman
             latitude: 27,     // Subtropical
-            urban: 65,        // Large city
-            rainfall: 5,      // Very dry
-            remoteness: 60    // Regional hub
+            population: 65,        // Large city
+            precipitation: 5,      // Very dry
+            accessibility: 40,    // Regional hub
+            development: 50,   // Default
+            tourism: 50,       // Default
+            wealth: 50         // Default
         }
     },
     {
@@ -1345,13 +1612,16 @@ const radarLocations = [
         lat: 52.2978,
         lng: 104.2964,
         radar: {
-            climate: 90,      // Extreme continental
-            elevation: 45,    // River valley
-            coastal: 0,       // Very inland
+            temperature: 90,      // Extreme continental
+            terrain: 45,    // River valley
+            coast: 0,       // Very inland
             latitude: 58,     // Northern
-            urban: 60,        // Large city
-            rainfall: 35,     // Semi-arid
-            remoteness: 30    // Isolated
+            population: 60,        // Large city
+            precipitation: 35,     // Semi-arid
+            accessibility: 70,    // Isolated
+            development: 50,   // Default
+            tourism: 50,       // Default
+            wealth: 50         // Default
         }
     },
     {
@@ -1360,13 +1630,16 @@ const radarLocations = [
         lat: 36.8065,
         lng: 10.1815,
         radar: {
-            climate: 35,      // Mediterranean
-            elevation: 20,    // Coastal hills
-            coastal: 90,      // Mediterranean Sea
+            temperature: 35,      // Mediterranean
+            terrain: 20,    // Coastal hills
+            coast: 90,      // Mediterranean Sea
             latitude: 43,     // Mid-latitude
-            urban: 75,        // Large city
-            rainfall: 35,     // Dry summer
-            remoteness: 70    // Well connected
+            population: 75,        // Large city
+            precipitation: 35,     // Dry summer
+            accessibility: 30,    // Well connected
+            development: 50,   // Default
+            tourism: 50,       // Default
+            wealth: 50         // Default
         }
     },
     {
@@ -1375,13 +1648,16 @@ const radarLocations = [
         lat: 21.0285,
         lng: 105.8542,
         radar: {
-            climate: 35,      // Humid subtropical
-            elevation: 20,    // River delta
-            coastal: 35,      // Inland near coast
+            temperature: 35,      // Humid subtropical
+            terrain: 20,    // River delta
+            coast: 35,      // Inland near coast
             latitude: 24,     // Tropical
-            urban: 85,        // Large city
-            rainfall: 80,     // Very wet monsoon
-            remoteness: 80    // Well connected
+            population: 85,        // Large city
+            precipitation: 80,     // Very wet monsoon
+            accessibility: 20,    // Well connected
+            development: 50,   // Default
+            tourism: 50,       // Default
+            wealth: 50         // Default
         }
     },
     {
@@ -1390,13 +1666,16 @@ const radarLocations = [
         lat: 37.1773,
         lng: -3.5986,
         radar: {
-            climate: 40,      // Mediterranean
-            elevation: 60,    // Sierra Nevada foothills
-            coastal: 25,      // Inland near coast
+            temperature: 40,      // Mediterranean
+            terrain: 60,    // Sierra Nevada foothills
+            coast: 25,      // Inland near coast
             latitude: 43,     // Mid-latitude
-            urban: 50,        // Medium city
-            rainfall: 35,     // Semi-arid
-            remoteness: 75    // Well connected
+            population: 50,        // Medium city
+            precipitation: 35,     // Semi-arid
+            accessibility: 25,    // Well connected
+            development: 50,   // Default
+            tourism: 50,       // Default
+            wealth: 50         // Default
         }
     },
     {
@@ -1405,13 +1684,16 @@ const radarLocations = [
         lat: -22.5597,
         lng: 17.0832,
         radar: {
-            climate: 40,      // Semi-arid highland
-            elevation: 75,    // High plateau
-            coastal: 5,       // Very inland
+            temperature: 40,      // Semi-arid highland
+            terrain: 75,    // High plateau
+            coast: 5,       // Very inland
             latitude: 26,     // Subtropical
-            urban: 50,        // Medium city
-            rainfall: 20,     // Dry
-            remoteness: 35    // Isolated
+            population: 50,        // Medium city
+            precipitation: 20,     // Dry
+            accessibility: 65,    // Isolated
+            development: 50,   // Default
+            tourism: 50,       // Default
+            wealth: 50         // Default
         }
     },
     {
@@ -1420,13 +1702,16 @@ const radarLocations = [
         lat: 50.9375,
         lng: 6.9603,
         radar: {
-            climate: 60,      // Temperate oceanic
-            elevation: 20,    // Rhine valley
-            coastal: 15,      // Inland
+            temperature: 60,      // Temperate oceanic
+            terrain: 20,    // Rhine valley
+            coast: 15,      // Inland
             latitude: 57,     // Mid-latitude
-            urban: 75,        // Large city
-            rainfall: 60,     // Moderate-wet
-            remoteness: 95    // Very central Europe
+            population: 75,        // Large city
+            precipitation: 60,     // Moderate-wet
+            accessibility: 5,    // Very central Europe
+            development: 50,   // Default
+            tourism: 50,       // Default
+            wealth: 50         // Default
         }
     },
     {
@@ -1435,13 +1720,16 @@ const radarLocations = [
         lat: 23.1136,
         lng: -82.3666,
         radar: {
-            climate: 20,      // Hot tropical
-            elevation: 10,    // Coastal plain
-            coastal: 95,      // Caribbean coast
+            temperature: 20,      // Hot tropical
+            terrain: 10,    // Coastal plain
+            coast: 95,      // Caribbean coast
             latitude: 26,     // Tropical
-            urban: 80,        // Large city
-            rainfall: 65,     // Wet season
-            remoteness: 50    // Island isolation
+            population: 80,        // Large city
+            precipitation: 65,     // Wet season
+            accessibility: 50,    // Island isolation
+            development: 50,   // Default
+            tourism: 50,       // Default
+            wealth: 50         // Default
         }
     },
     {
@@ -1450,13 +1738,16 @@ const radarLocations = [
         lat: -45.0312,
         lng: 168.6626,
         radar: {
-            climate: 60,      // Cool oceanic
-            elevation: 60,    // Alpine lakes
-            coastal: 20,      // Inland
+            temperature: 60,      // Cool oceanic
+            terrain: 60,    // Alpine lakes
+            coast: 20,      // Inland
             latitude: 52,     // Mid-latitude
-            urban: 25,        // Small city
-            rainfall: 45,     // Moderate
-            remoteness: 20    // Very isolated
+            population: 25,        // Small city
+            precipitation: 45,     // Moderate
+            accessibility: 80,    // Very isolated
+            development: 50,   // Default
+            tourism: 50,       // Default
+            wealth: 50         // Default
         }
     },
     {
@@ -1465,13 +1756,16 @@ const radarLocations = [
         lat: -8.8383,
         lng: 13.2344,
         radar: {
-            climate: 20,      // Hot tropical
-            elevation: 15,    // Coastal plain
-            coastal: 95,      // Atlantic coast
+            temperature: 20,      // Hot tropical
+            terrain: 15,    // Coastal plain
+            coast: 95,      // Atlantic coast
             latitude: 10,     // Near equator
-            urban: 80,        // Large city
-            rainfall: 40,     // Semi-arid
-            remoteness: 50    // Regional hub
+            population: 80,        // Large city
+            precipitation: 40,     // Semi-arid
+            accessibility: 50,    // Regional hub
+            development: 50,   // Default
+            tourism: 50,       // Default
+            wealth: 50         // Default
         }
     },
     {
@@ -1480,13 +1774,16 @@ const radarLocations = [
         lat: 49.2583,
         lng: 4.0317,
         radar: {
-            climate: 60,      // Temperate oceanic
-            elevation: 25,    // Plains
-            coastal: 20,      // Inland
+            temperature: 60,      // Temperate oceanic
+            terrain: 25,    // Plains
+            coast: 20,      // Inland
             latitude: 55,     // Mid-latitude
-            urban: 55,        // Medium city
-            rainfall: 55,     // Moderate
-            remoteness: 90    // Well connected
+            population: 55,        // Medium city
+            precipitation: 55,     // Moderate
+            accessibility: 10,    // Well connected
+            development: 50,   // Default
+            tourism: 50,       // Default
+            wealth: 50         // Default
         }
     },
     {
@@ -1495,13 +1792,16 @@ const radarLocations = [
         lat: 43.0642,
         lng: 141.3469,
         radar: {
-            climate: 75,      // Cold continental
-            elevation: 25,    // Coastal plain
-            coastal: 50,      // Near Sea of Japan
+            temperature: 75,      // Cold continental
+            terrain: 25,    // Coastal plain
+            coast: 50,      // Near Sea of Japan
             latitude: 50,     // Mid-latitude
-            urban: 75,        // Large city
-            rainfall: 70,     // Snowy wet
-            remoteness: 70    // Well connected
+            population: 75,        // Large city
+            precipitation: 70,     // Snowy wet
+            accessibility: 30,    // Well connected
+            development: 50,   // Default
+            tourism: 50,       // Default
+            wealth: 50         // Default
         }
     },
     {
@@ -1510,13 +1810,16 @@ const radarLocations = [
         lat: 26.9124,
         lng: 75.7873,
         radar: {
-            climate: 15,      // Hot semi-arid
-            elevation: 45,    // Aravalli hills
-            coastal: 0,       // Very inland
+            temperature: 15,      // Hot semi-arid
+            terrain: 45,    // Aravalli hills
+            coast: 0,       // Very inland
             latitude: 31,     // Subtropical
-            urban: 80,        // Large city
-            rainfall: 35,     // Monsoon dry
-            remoteness: 80    // Well connected
+            population: 80,        // Large city
+            precipitation: 35,     // Monsoon dry
+            accessibility: 20,    // Well connected
+            development: 50,   // Default
+            tourism: 50,       // Default
+            wealth: 50         // Default
         }
     },
     {
@@ -1525,13 +1828,16 @@ const radarLocations = [
         lat: 60.3913,
         lng: 5.3221,
         radar: {
-            climate: 65,      // Cool oceanic
-            elevation: 55,    // Fjord mountains
-            coastal: 95,      // North Sea fjords
+            temperature: 65,      // Cool oceanic
+            terrain: 55,    // Fjord mountains
+            coast: 95,      // North Sea fjords
             latitude: 75,     // Northern
-            urban: 55,        // Medium city
-            rainfall: 100,    // Extremely wet
-            remoteness: 60    // Well connected
+            population: 55,        // Medium city
+            precipitation: 100,    // Extremely wet
+            accessibility: 40,    // Well connected
+            development: 50,   // Default
+            tourism: 50,       // Default
+            wealth: 50         // Default
         }
     },
     {
@@ -1540,13 +1846,16 @@ const radarLocations = [
         lat: -35.2809,
         lng: 149.1300,
         radar: {
-            climate: 45,      // Temperate
-            elevation: 60,    // Highland valley
-            coastal: 10,      // Inland
+            temperature: 45,      // Temperate
+            terrain: 60,    // Highland valley
+            coast: 10,      // Inland
             latitude: 41,     // Mid-latitude
-            urban: 60,        // Large city
-            rainfall: 40,     // Moderate
-            remoteness: 65    // Well connected
+            population: 60,        // Large city
+            precipitation: 40,     // Moderate
+            accessibility: 35,    // Well connected
+            development: 50,   // Default
+            tourism: 50,       // Default
+            wealth: 50         // Default
         }
     },
     {
@@ -1555,13 +1864,16 @@ const radarLocations = [
         lat: 25.2854,
         lng: 51.5310,
         radar: {
-            climate: 5,       // Extremely hot desert
-            elevation: 5,     // Coastal flat
-            coastal: 95,      // Persian Gulf
+            temperature: 5,       // Extremely hot desert
+            terrain: 5,     // Coastal flat
+            coast: 95,      // Persian Gulf
             latitude: 28,     // Subtropical
-            urban: 90,        // Mega-city
-            rainfall: 5,      // Extremely dry
-            remoteness: 80    // Major hub
+            population: 90,        // Mega-city
+            precipitation: 5,      // Extremely dry
+            accessibility: 20,    // Major hub
+            development: 50,   // Default
+            tourism: 50,       // Default
+            wealth: 50         // Default
         }
     },
     {
@@ -1570,13 +1882,16 @@ const radarLocations = [
         lat: 47.8864,
         lng: 106.9057,
         radar: {
-            climate: 100,     // Extreme continental cold
-            elevation: 70,    // High plateau
-            coastal: 0,       // Very inland
+            temperature: 100,     // Extreme continental cold
+            terrain: 70,    // High plateau
+            coast: 0,       // Very inland
             latitude: 54,     // Mid-latitude
-            urban: 60,        // Large city
-            rainfall: 15,     // Very dry
-            remoteness: 20    // Very isolated
+            population: 60,        // Large city
+            precipitation: 15,     // Very dry
+            accessibility: 80,    // Very isolated
+            development: 50,   // Default
+            tourism: 50,       // Default
+            wealth: 50         // Default
         }
     },
     {
@@ -1585,13 +1900,16 @@ const radarLocations = [
         lat: -6.1659,
         lng: 39.2026,
         radar: {
-            climate: 20,      // Hot tropical
-            elevation: 5,     // Island coast
-            coastal: 100,     // Island
+            temperature: 20,      // Hot tropical
+            terrain: 5,     // Island coast
+            coast: 100,     // Island
             latitude: 8,      // Near equator
-            urban: 40,        // Medium city
-            rainfall: 85,     // Very wet
-            remoteness: 35    // Island isolation
+            population: 40,        // Medium city
+            precipitation: 85,     // Very wet
+            accessibility: 65,    // Island isolation
+            development: 50,   // Default
+            tourism: 50,       // Default
+            wealth: 50         // Default
         }
     },
     {
@@ -1600,13 +1918,16 @@ const radarLocations = [
         lat: 47.8095,
         lng: 13.0550,
         radar: {
-            climate: 60,      // Alpine temperate
-            elevation: 55,    // Alpine valley
-            coastal: 0,       // Very inland
+            temperature: 60,      // Alpine temperate
+            terrain: 55,    // Alpine valley
+            coast: 0,       // Very inland
             latitude: 54,     // Mid-latitude
-            urban: 50,        // Medium city
-            rainfall: 70,     // Wet
-            remoteness: 85    // Well connected
+            population: 50,        // Medium city
+            precipitation: 70,     // Wet
+            accessibility: 15,    // Well connected
+            development: 50,   // Default
+            tourism: 50,       // Default
+            wealth: 50         // Default
         }
     },
     {
@@ -1615,13 +1936,16 @@ const radarLocations = [
         lat: -8.4095,
         lng: 115.1889,
         radar: {
-            climate: 15,      // Hot tropical
-            elevation: 50,    // Volcanic mountains
-            coastal: 100,     // Island
+            temperature: 15,      // Hot tropical
+            terrain: 50,    // Volcanic mountains
+            coast: 100,     // Island
             latitude: 10,     // Near equator
-            urban: 45,        // Medium city
-            rainfall: 90,     // Very wet
-            remoteness: 60    // Island tourism hub
+            population: 45,        // Medium city
+            precipitation: 90,     // Very wet
+            accessibility: 40,    // Island tourism hub
+            development: 50,   // Default
+            tourism: 50,       // Default
+            wealth: 50         // Default
         }
     },
     {
@@ -1630,13 +1954,16 @@ const radarLocations = [
         lat: 37.3891,
         lng: -5.9845,
         radar: {
-            climate: 25,      // Hot Mediterranean
-            elevation: 15,    // River valley
-            coastal: 30,      // Inland near coast
+            temperature: 25,      // Hot Mediterranean
+            terrain: 15,    // River valley
+            coast: 30,      // Inland near coast
             latitude: 43,     // Mid-latitude
-            urban: 70,        // Large city
-            rainfall: 30,     // Dry
-            remoteness: 80    // Well connected
+            population: 70,        // Large city
+            precipitation: 30,     // Dry
+            accessibility: 20,    // Well connected
+            development: 50,   // Default
+            tourism: 50,       // Default
+            wealth: 50         // Default
         }
     },
     {
@@ -1645,13 +1972,16 @@ const radarLocations = [
         lat: 46.9481,
         lng: 7.4474,
         radar: {
-            climate: 60,      // Alpine temperate
-            elevation: 60,    // Alpine foothills
-            coastal: 0,       // Very inland
+            temperature: 60,      // Alpine temperate
+            terrain: 60,    // Alpine foothills
+            coast: 0,       // Very inland
             latitude: 53,     // Mid-latitude
-            urban: 50,        // Medium city
-            rainfall: 65,     // Moderate-wet
-            remoteness: 90    // Very central Europe
+            population: 50,        // Medium city
+            precipitation: 65,     // Moderate-wet
+            accessibility: 10,    // Very central Europe
+            development: 50,   // Default
+            tourism: 50,       // Default
+            wealth: 50         // Default
         }
     },
     {
@@ -1660,13 +1990,16 @@ const radarLocations = [
         lat: 31.9454,
         lng: 35.9284,
         radar: {
-            climate: 35,      // Hot Mediterranean
-            elevation: 60,    // Highland plateau
-            coastal: 20,      // Inland near coast
+            temperature: 35,      // Hot Mediterranean
+            terrain: 60,    // Highland plateau
+            coast: 20,      // Inland near coast
             latitude: 36,     // Subtropical
-            urban: 75,        // Large city
-            rainfall: 25,     // Semi-arid
-            remoteness: 70    // Regional hub
+            population: 75,        // Large city
+            precipitation: 25,     // Semi-arid
+            accessibility: 30,    // Regional hub
+            development: 50,   // Default
+            tourism: 50,       // Default
+            wealth: 50         // Default
         }
     },
     {
@@ -1675,13 +2008,16 @@ const radarLocations = [
         lat: 51.8985,
         lng: -8.4756,
         radar: {
-            climate: 65,      // Cool oceanic
-            elevation: 20,    // River valley
-            coastal: 80,      // Near Atlantic
+            temperature: 65,      // Cool oceanic
+            terrain: 20,    // River valley
+            coast: 80,      // Near Atlantic
             latitude: 58,     // Northern
-            urban: 50,        // Medium city
-            rainfall: 80,     // Very wet
-            remoteness: 70    // Well connected
+            population: 50,        // Medium city
+            precipitation: 80,     // Very wet
+            accessibility: 30,    // Well connected
+            development: 50,   // Default
+            tourism: 50,       // Default
+            wealth: 50         // Default
         }
     },
     {
@@ -1690,13 +2026,16 @@ const radarLocations = [
         lat: 34.0181,
         lng: -5.0078,
         radar: {
-            climate: 40,      // Hot Mediterranean
-            elevation: 50,    // Highland valley
-            coastal: 20,      // Inland
+            temperature: 40,      // Hot Mediterranean
+            terrain: 50,    // Highland valley
+            coast: 20,      // Inland
             latitude: 39,     // Subtropical
-            urban: 65,        // Large city
-            rainfall: 35,     // Semi-arid
-            remoteness: 65    // Regional hub
+            population: 65,        // Large city
+            precipitation: 35,     // Semi-arid
+            accessibility: 35,    // Regional hub
+            development: 50,   // Default
+            tourism: 50,       // Default
+            wealth: 50         // Default
         }
     },
     {
@@ -1705,13 +2044,16 @@ const radarLocations = [
         lat: 33.5731,
         lng: -7.5898,
         radar: {
-            climate: 35,      // Mediterranean
-            elevation: 10,    // Coastal plain
-            coastal: 95,      // Atlantic coast
+            temperature: 35,      // Mediterranean
+            terrain: 10,    // Coastal plain
+            coast: 95,      // Atlantic coast
             latitude: 38,     // Subtropical
-            urban: 90,        // Mega-city
-            rainfall: 30,     // Dry
-            remoteness: 75    // Major hub
+            population: 90,        // Mega-city
+            precipitation: 30,     // Dry
+            accessibility: 25,    // Major hub
+            development: 50,   // Default
+            tourism: 50,       // Default
+            wealth: 50         // Default
         }
     },
     {
@@ -1720,13 +2062,16 @@ const radarLocations = [
         lat: 43.8563,
         lng: 18.4131,
         radar: {
-            climate: 60,      // Continental
-            elevation: 60,    // Mountain valley
-            coastal: 15,      // Inland near coast
+            temperature: 60,      // Continental
+            terrain: 60,    // Mountain valley
+            coast: 15,      // Inland near coast
             latitude: 50,     // Mid-latitude
-            urban: 55,        // Medium city
-            rainfall: 55,     // Moderate
-            remoteness: 60    // Regional hub
+            population: 55,        // Medium city
+            precipitation: 55,     // Moderate
+            accessibility: 40,    // Regional hub
+            development: 50,   // Default
+            tourism: 50,       // Default
+            wealth: 50         // Default
         }
     },
     {
@@ -1735,28 +2080,34 @@ const radarLocations = [
         lat: -13.5319,
         lng: -71.9675,
         radar: {
-            climate: 55,      // Cool highland
-            elevation: 95,    // Very high Andes
-            coastal: 5,       // Very inland
+            temperature: 55,      // Cool highland
+            terrain: 95,    // Very high Andes
+            coast: 5,       // Very inland
             latitude: 16,     // Tropical
-            urban: 60,        // Large city
-            rainfall: 35,     // Semi-arid
-            remoteness: 40    // Isolated
+            population: 60,        // Large city
+            precipitation: 35,     // Semi-arid
+            accessibility: 60,    // Isolated
+            development: 50,   // Default
+            tourism: 50,       // Default
+            wealth: 50         // Default
         }
     },
     {
-        name: 'Reykjavík, Iceland',
-        fact: 'Reykjavík means "smoky bay" from the geothermal steam Vikings saw.',
+        name: 'ReykjavÃ­k, Iceland',
+        fact: 'ReykjavÃ­k means "smoky bay" from the geothermal steam Vikings saw.',
         lat: 64.1466,
         lng: -21.9426,
         radar: {
-            climate: 75,      // Cold oceanic
-            elevation: 15,    // Coastal plain
-            coastal: 95,      // Atlantic coast
+            temperature: 75,      // Cold oceanic
+            terrain: 15,    // Coastal plain
+            coast: 95,      // Atlantic coast
             latitude: 80,     // Subarctic
-            urban: 50,        // Medium city
-            rainfall: 70,     // Wet
-            remoteness: 25    // Isolated
+            population: 50,        // Medium city
+            precipitation: 70,     // Wet
+            accessibility: 75,    // Isolated
+            development: 50,   // Default
+            tourism: 50,       // Default
+            wealth: 50         // Default
         }
     },
     {
@@ -1765,13 +2116,16 @@ const radarLocations = [
         lat: 24.4539,
         lng: 54.3773,
         radar: {
-            climate: 5,       // Extremely hot desert
-            elevation: 5,     // Island flat
-            coastal: 95,      // Persian Gulf
+            temperature: 5,       // Extremely hot desert
+            terrain: 5,     // Island flat
+            coast: 95,      // Persian Gulf
             latitude: 27,     // Subtropical
-            urban: 90,        // Mega-city
-            rainfall: 5,      // Extremely dry
-            remoteness: 85    // Major hub
+            population: 90,        // Mega-city
+            precipitation: 5,      // Extremely dry
+            accessibility: 15,    // Major hub
+            development: 50,   // Default
+            tourism: 50,       // Default
+            wealth: 50         // Default
         }
     },
     {
@@ -1780,13 +2134,16 @@ const radarLocations = [
         lat: 23.1291,
         lng: 113.2644,
         radar: {
-            climate: 25,      // Humid subtropical
-            elevation: 15,    // River delta
-            coastal: 60,      // Pearl River
+            temperature: 25,      // Humid subtropical
+            terrain: 15,    // River delta
+            coast: 60,      // Pearl River
             latitude: 26,     // Tropical
-            urban: 100,       // Mega-city
-            rainfall: 85,     // Very wet monsoon
-            remoteness: 90    // Major hub
+            population: 100,       // Mega-city
+            precipitation: 85,     // Very wet monsoon
+            accessibility: 10,    // Major hub
+            development: 50,   // Default
+            tourism: 50,       // Default
+            wealth: 50         // Default
         }
     },
     {
@@ -1795,13 +2152,16 @@ const radarLocations = [
         lat: 6.5244,
         lng: 3.3792,
         radar: {
-            climate: 20,      // Hot tropical
-            elevation: 5,     // Coastal lagoon
-            coastal: 95,      // Atlantic coast
+            temperature: 20,      // Hot tropical
+            terrain: 5,     // Coastal lagoon
+            coast: 95,      // Atlantic coast
             latitude: 8,      // Near equator
-            urban: 100,       // Mega-city
-            rainfall: 80,     // Very wet
-            remoteness: 75    // Major hub
+            population: 100,       // Mega-city
+            precipitation: 80,     // Very wet
+            accessibility: 25,    // Major hub
+            development: 50,   // Default
+            tourism: 50,       // Default
+            wealth: 50         // Default
         }
     },
     {
@@ -1810,26 +2170,32 @@ const radarLocations = [
         lat: 54.6872,
         lng: 25.2797,
         radar: {
-            climate: 75,      // Continental cold
-            elevation: 20,    // River valley
-            coastal: 30,      // Inland
+            temperature: 75,      // Continental cold
+            terrain: 20,    // River valley
+            coast: 30,      // Inland
             latitude: 67,     // Northern
-            urban: 60,        // Large city
-            rainfall: 50,     // Moderate
-            remoteness: 75    // Well connected
+            population: 60,        // Large city
+            precipitation: 50,     // Moderate
+            accessibility: 25,    // Well connected
+            development: 50,   // Default
+            tourism: 50,       // Default
+            wealth: 50         // Default
         }
     }
 ];
 
 // Radar chart axis labels (in order, starting from top, going clockwise)
 const radarAxes = [
-    { key: 'climate', labelLow: 'Hot', labelHigh: 'Cold' },
-    { key: 'elevation', labelLow: 'Flat', labelHigh: 'Mountainous' },
-    { key: 'coastal', labelLow: 'Inland', labelHigh: 'Coastal' },
-    { key: 'latitude', labelLow: 'Equator', labelHigh: 'Polar' },
-    { key: 'urban', labelLow: 'Rural', labelHigh: 'Mega-city' },
-    { key: 'rainfall', labelLow: 'Dry', labelHigh: 'Wet' },
-    { key: 'remoteness', labelLow: 'Isolated', labelHigh: 'Central' }
+    { key: 'temperature', labelLow: '', labelHigh: 'Temperature' },
+    { key: 'terrain', labelLow: '', labelHigh: 'Mountainous' },
+    { key: 'coast', labelLow: '', labelHigh: 'Coastal' },
+    { key: 'latitude', labelLow: '', labelHigh: 'Polar' },
+    { key: 'population', labelLow: '', labelHigh: 'Urban' },
+    { key: 'precipitation', labelLow: '', labelHigh: 'Rainy' },
+    { key: 'accessibility', labelLow: '', labelHigh: 'Accessible' },
+    { key: 'development', labelLow: '', labelHigh: 'Developed' },
+    { key: 'tourism', labelLow: '', labelHigh: 'Tourism' },
+    { key: 'wealth', labelLow: '', labelHigh: 'Wealth' }
 ];
 
 /**
@@ -1968,7 +2334,7 @@ function updateRadarLegend(legendEl) {
     legendEl.innerHTML = radarAxes.map(axis => 
         `<div class="radar-legend-item">
             <span class="radar-legend-label">${axis.labelLow}</span>
-            <span class="radar-legend-arrow">→</span>
+            <span class="radar-legend-arrow">â†’</span>
             <span class="radar-legend-label">${axis.labelHigh}</span>
         </div>`
     ).join('');
