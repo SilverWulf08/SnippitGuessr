@@ -360,6 +360,15 @@ function showModeIntro(mode) {
                 'Guess within 5 km in 10 rounds to win. Choose Classic or Timer play style.';
         }
 
+        const helpCredits = document.getElementById('modeIntroHelpCredits');
+        if (helpCredits) {
+            helpCredits.innerHTML =
+                'Photo by <a href="https://unsplash.com/@anik3t?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Aniket Deole</a> on <a href="https://unsplash.com/photos/photo-of-valley-M6XC789HLe8?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a><br/><br/>' +
+                'Photo by <a href="https://unsplash.com/@mohamadaz?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Mohammad Alizade</a> on <a href="https://unsplash.com/photos/brown-mountains-under-blue-sky-4wzRuAb-KWs?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a><br/><br/>' +
+                'Photo by <a href="https://unsplash.com/@andersjilden?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Anders Jildén</a> on <a href="https://unsplash.com/photos/golden-hour-photography-of-docking-pier-on-body-of-water-uwbajDCODj4?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a><br/><br/>' +
+                'Photo by <a href="https://unsplash.com/@seefromthesky?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Ishan @seefromthesky</a> on <a href="https://unsplash.com/photos/twin-tower-malaysia-6U-sSfBV-gM?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>';
+        }
+
         if (moreBtn) moreBtn.style.display = 'none';
         if (classicScoring) classicScoring.style.display = 'none';
         diff.style.display = 'none';
@@ -828,6 +837,11 @@ function wireHomeButtons() {
             if (isAnimating) return;
             isAnimating = true;
 
+            const nextMode = modeById[cards[clamped].id];
+            if (nextMode) {
+                setHomeBackgroundForMode(nextMode);
+            }
+
             const finishTransition = () => {
                 activeIndex = clamped;
                 applyPositions();
@@ -991,6 +1005,10 @@ function wireHomeButtons() {
         });
 
         applyPositions();
+
+        // Set initial background to the front card
+        const initialMode = modeById[cards[activeIndex].id] || 'classic';
+        setHomeBackgroundForMode(initialMode, { immediate: true });
     };
 
     // No loading spinner here: we first show the mode intro screen.
@@ -1177,6 +1195,56 @@ function wireHomeBottomBarScale() {
 
     window.addEventListener('resize', schedule);
     schedule();
+}
+
+// Home screen backgrounds follow the active card (front of deck)
+const HOME_MODE_BACKGROUNDS = {
+    classic: 'Images & Icons/Kuala Lumpur, Malaysia.jpg',
+    questions: 'Images & Icons/Mashhad, Iran.jpg',
+    reveal: 'Images & Icons/Tunnel View, United States.jpg',
+    radar: 'Images & Icons/Värmdö, Sweden.jpg'
+};
+
+let currentHomeBgMode = 'classic';
+let homeBgFadeTimer = null;
+
+function setHomeBackgroundForMode(mode, options = {}) {
+    const homeScreen = document.getElementById('homeScreen');
+    if (!homeScreen) return;
+
+    const bgUrl = HOME_MODE_BACKGROUNDS[mode] || HOME_MODE_BACKGROUNDS.classic;
+    const { immediate = false } = options;
+
+    if (homeBgFadeTimer) {
+        clearTimeout(homeBgFadeTimer);
+        homeBgFadeTimer = null;
+    }
+
+    // Skip if already showing this mode and not forced
+    if (!immediate && currentHomeBgMode === mode) return;
+    currentHomeBgMode = mode;
+
+    if (immediate) {
+        homeScreen.classList.remove('fade-bg');
+        homeScreen.style.setProperty('--bg-current', `url('${bgUrl}')`);
+        homeScreen.style.setProperty('--bg-next', `url('${bgUrl}')`);
+        return;
+    }
+
+    // Cross-fade to the new mode background
+    homeScreen.classList.remove('fade-bg');
+    // Force reflow so consecutive rapid changes still trigger the transition
+    void homeScreen.offsetWidth;
+    homeScreen.style.setProperty('--bg-next', `url('${bgUrl}')`);
+    homeScreen.classList.add('fade-bg');
+
+    // After transition completes, lock in as current
+    homeBgFadeTimer = setTimeout(() => {
+        homeScreen.style.setProperty('--bg-current', `url('${bgUrl}')`);
+        homeScreen.classList.remove('fade-bg');
+        homeScreen.style.setProperty('--bg-next', `url('${bgUrl}')`);
+        homeBgFadeTimer = null;
+    }, 1200);
 }
 
 window.addEventListener('load', () => {

@@ -2,6 +2,18 @@
   "intro": "Patch notes for Snippit. Latest changes are at the top. (these patch notes and versions start at the release of the patch notes system)",
   "versions": [
     {
+      "version": "0.3.4",
+      "date": "2026-01-08",
+      "notes": [
+        "UI visuals refresh: added global micro-interactions and animations across buttons/cards; optimized styles.css by removing duplicate selectors while keeping performance tuned.",
+        "Home deck: removed the backdrop behind the mode cards so they sit directly on the background.",
+        "Assets: consolidated all PNG/JPG icons into Images & Icons and updated in-app references to the new paths.",
+        "Intro screens: each mode now has its own dedicated wallpaper (Kuala Lumpur, Mashhad, Tunnel View, Värmdö) without frosted glass; added wallpaper credits to the Help screen.",
+        "Home screen: background now mirrors the front game card (Classic/Questions/Radar/Reveal) with a smooth cross-fade and persistent frosted overlay; rapid card cycling keeps the fade and blur in sync.",
+        "UI polish: Help and Patch Notes back button no longer collapses on narrow windows; scrolling content uses flexible layout so headers stay intact."
+      ]
+    },
+    {
       "version": "0.3.3",
       "date": "2026-01-07",
       "notes": [

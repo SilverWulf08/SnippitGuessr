@@ -32,10 +32,44 @@ body {
     inset: 0;
     z-index: 900;
     overflow: hidden;
-    /* Match the small-screen home background on desktop too (prevents white fallback). */
+    --bg-current: url('Images & Icons/Kuala Lumpur, Malaysia.jpg');
+    --bg-next: url('Images & Icons/Kuala Lumpur, Malaysia.jpg');
+}
+
+.home-screen::before {
+    content: '';
+    position: absolute;
+    inset: 0;
     background:
         linear-gradient(to top left, rgba(0, 0, 0, 0.72) 0%, rgba(0, 0, 0, 0.30) 32%, rgba(0, 0, 0, 0.0) 72%),
-        var(--surface-2);
+        var(--bg-current);
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    filter: blur(6px) saturate(1.05);
+    transform: scale(1.02);
+    pointer-events: none;
+}
+
+.home-screen::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+        linear-gradient(to top left, rgba(0, 0, 0, 0.72) 0%, rgba(0, 0, 0, 0.30) 32%, rgba(0, 0, 0, 0.0) 72%),
+        var(--bg-next);
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    filter: blur(6px) saturate(1.05);
+    transform: scale(1.02);
+    opacity: 0;
+    transition: opacity 1.2s ease-in-out;
+    pointer-events: none;
+}
+
+.home-screen.fade-bg::after {
+    opacity: 1;
 }
 
 /* Mode intro overlay (after picking a mode, before Play) */
@@ -58,60 +92,94 @@ body {
 }
 
 .mode-intro[data-mode="classic"] {
-    background:
-        /* Smooth diagonal shadow that originates in the bottom-right corner */
-        linear-gradient(to top left, rgba(0, 0, 0, 0.72) 0%, rgba(0, 0, 0, 0.30) 32%, rgba(0, 0, 0, 0.0) 72%),
-        var(--surface-2);
+    background-image: url('Images & Icons/Kuala Lumpur, Malaysia.jpg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+}
+
+.mode-intro[data-mode="classic"]::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top left, rgba(0, 0, 0, 0.72) 0%, rgba(0, 0, 0, 0.30) 32%, rgba(0, 0, 0, 0.0) 72%);
+    pointer-events: none;
 }
 
 .mode-intro[data-mode="help"] {
     background:
-    /* Match Classic styling */
         linear-gradient(to top left, rgba(0, 0, 0, 0.72) 0%, rgba(0, 0, 0, 0.30) 32%, rgba(0, 0, 0, 0.0) 72%),
         var(--surface-2);
 }
 
 .mode-intro[data-mode="patchNotes"] {
     background:
-    /* Match Classic styling */
         linear-gradient(to top left, rgba(0, 0, 0, 0.72) 0%, rgba(0, 0, 0, 0.30) 32%, rgba(0, 0, 0, 0.0) 72%),
         var(--surface-2);
 }
 
 .mode-intro[data-mode="points"] {
     /* Dark green with a diagonal black gradient overlay (no new accent color) */
-    background:
-    /* Smooth diagonal shadow that originates in the bottom-right corner */
-    linear-gradient(to top left, rgba(0, 0, 0, 0.72) 0%, rgba(0, 0, 0, 0.30) 32%, rgba(0, 0, 0, 0.0) 72%),
-        linear-gradient(rgba(0, 0, 0, 0.62), rgba(0, 0, 0, 0.62)),
-        #4CAF50;
+    background-image: url('Images & Icons/Kuala Lumpur, Malaysia.jpg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+}
+
+.mode-intro[data-mode="points"]::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top left, rgba(0, 0, 0, 0.72) 0%, rgba(0, 0, 0, 0.30) 32%, rgba(0, 0, 0, 0.0) 72%);
+    pointer-events: none;
 }
 
 .mode-intro[data-mode="questions"] {
     /* Yellow with a diagonal black gradient overlay (use the same yellow as the km distance indicator) */
-    background:
-    /* Smooth diagonal shadow that originates in the bottom-right corner */
-    linear-gradient(to top left, rgba(0, 0, 0, 0.72) 0%, rgba(0, 0, 0, 0.30) 32%, rgba(0, 0, 0, 0.0) 72%),
-        linear-gradient(rgba(0, 0, 0, 0.62), rgba(0, 0, 0, 0.62)),
-    #f5c938;
+    background-image: url('Images & Icons/Mashhad, Iran.jpg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+}
+
+.mode-intro[data-mode="questions"]::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top left, rgba(0, 0, 0, 0.72) 0%, rgba(0, 0, 0, 0.30) 32%, rgba(0, 0, 0, 0.0) 72%);
+    pointer-events: none;
 }
 
 .mode-intro[data-mode="reveal"] {
     /* Green with a diagonal black gradient overlay (same green as the Guess button) */
-    background:
-    /* Smooth diagonal shadow that originates in the bottom-right corner */
-    linear-gradient(to top left, rgba(0, 0, 0, 0.72) 0%, rgba(0, 0, 0, 0.30) 32%, rgba(0, 0, 0, 0.0) 72%),
-        linear-gradient(rgba(0, 0, 0, 0.62), rgba(0, 0, 0, 0.62)),
-    #4CAF50;
+    background-image: url('Images & Icons/Tunnel View, United States.jpg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+}
+
+.mode-intro[data-mode="reveal"]::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top left, rgba(0, 0, 0, 0.72) 0%, rgba(0, 0, 0, 0.30) 32%, rgba(0, 0, 0, 0.0) 72%);
+    pointer-events: none;
 }
 
 .mode-intro[data-mode="radar"] {
     /* Cobalt blue with a diagonal black gradient overlay */
-    background:
-    /* Smooth diagonal shadow that originates in the bottom-right corner */
-    linear-gradient(to top left, rgba(0, 0, 0, 0.72) 0%, rgba(0, 0, 0, 0.30) 32%, rgba(0, 0, 0, 0.0) 72%),
-        linear-gradient(rgba(0, 0, 0, 0.62), rgba(0, 0, 0, 0.62)),
-    #0047AB;
+    background-image: url('Images & Icons/Värmdö, Sweden.jpg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+}
+
+.mode-intro[data-mode="radar"]::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top left, rgba(0, 0, 0, 0.72) 0%, rgba(0, 0, 0, 0.30) 32%, rgba(0, 0, 0, 0.0) 72%);
+    pointer-events: none;
 }
 
 .mode-intro__panel {
@@ -119,7 +187,6 @@ body {
     border-radius: var(--radius);
     background: rgba(18, 18, 18, 0.72);
     border: 1px solid rgba(255, 255, 255, 0.10);
-    backdrop-filter: blur(12px);
     box-shadow: var(--shadow);
     padding: 18px;
     max-height: calc(100vh - 70px);
@@ -128,6 +195,8 @@ body {
     flex-direction: column;
     transform: translateY(10px) scale(0.99);
     transition: transform 260ms ease;
+    position: relative;
+    z-index: 1;
 }
 
 .mode-intro.is-visible .mode-intro__panel {
@@ -149,6 +218,9 @@ body {
     box-shadow: var(--shadow-sm);
     font-size: 13px;
     font-weight: 600;
+    flex-shrink: 0;
+    white-space: nowrap;
+    margin-bottom: 8px;
     transition: transform 180ms ease, filter 180ms ease, box-shadow 180ms ease;
 }
 
@@ -181,6 +253,7 @@ body {
 .mode-intro__content {
     min-height: 0;
     overflow: auto;
+    flex: 1;
     padding-right: 2px;
 }
 
@@ -204,6 +277,24 @@ body {
     color: rgba(255, 255, 255, 0.88);
     line-height: 1.45;
     font-size: 14px;
+}
+
+.mode-intro__help-credits {
+    margin-top: 8px;
+    color: rgba(255, 255, 255, 0.88);
+    line-height: 1.6;
+    font-size: 13px;
+}
+
+.mode-intro__help-credits a {
+    color: rgba(100, 200, 255, 0.9);
+    text-decoration: none;
+    transition: color 200ms ease;
+}
+
+.mode-intro__help-credits a:hover {
+    color: rgb(150, 220, 255);
+    text-decoration: underline;
 }
 
 .mode-intro__more--inline {
@@ -757,22 +848,6 @@ body {
     --home-card-w: min(360px, calc(100vw - 72px), calc(var(--home-card-h) * 5 / 7));
     --home-deck-pad: 22px;
 }
-
-.home-deck::before {
-    content: '';
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    width: min(980px, 100%);
-    height: min(620px, 100%);
-    transform: translate(-50%, -50%);
-    border-radius: var(--radius);
-    background: rgba(30, 30, 30, 0.52);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    box-shadow: var(--shadow);
-    /* Never intercept clicks; cards must be clickable */
-    pointer-events: none;
-}
 .home-bottom-bar {
     position: absolute;
     left: 18px;
@@ -1193,10 +1268,6 @@ body {
         --home-mobile-spread: max(0px, calc((100vw - 36px - var(--home-card-w)) / 2 - 18px));
     }
 
-    .home-deck::before {
-        height: min(560px, 100%);
-    }
-
     .home-bottom-bar {
         bottom: calc(18px + env(safe-area-inset-bottom));
     }
@@ -1433,6 +1504,8 @@ body {
     box-shadow: var(--shadow);
     padding: 18px;
     text-align: center;
+    will-change: transform, filter, box-shadow;
+    transition: transform 200ms ease, filter 200ms ease, box-shadow 240ms ease;
 }
 
 .question-panel__kicker {
@@ -1482,6 +1555,8 @@ body {
     flex-direction: column;
     align-items: center;
     margin: auto;
+    will-change: transform, filter, box-shadow;
+    transition: transform 200ms ease, filter 200ms ease, box-shadow 240ms ease;
 }
 
 .radar-panel__kicker {
@@ -1560,6 +1635,9 @@ body {
     pointer-events: none;
     min-width: 72px;
     text-align: center;
+    will-change: transform, filter, box-shadow;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.35);
+    animation: timer-breathe 2400ms ease-in-out infinite;
 }
 
 /* Radar mode: timer in top-right corner (aligned with home button on left) */
@@ -1716,6 +1794,7 @@ button.home-button:focus-visible {
     opacity: 1;
     transition: transform 360ms cubic-bezier(0.2, 0.8, 0.2, 1), opacity 260ms ease;
     will-change: transform, opacity;
+    animation: result-pop-in 360ms cubic-bezier(0.2, 0.8, 0.2, 1);
     padding-bottom: 36px;
 }
 
@@ -1993,6 +2072,10 @@ body[data-mode="questions"].is-points-scoring .points-stats-row {
     border-radius: var(--radius);
     box-shadow: var(--shadow);
     padding: 18px 18px 16px;
+    transform: translateY(6px) scale(0.992);
+    opacity: 0.98;
+    will-change: transform, opacity;
+    animation: summary-pop 320ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
 }
 
 .points-summary-title {
@@ -2117,6 +2200,7 @@ body[data-mode="questions"].is-points-scoring .points-stats-row {
     backdrop-filter: blur(10px);
     box-shadow: var(--shadow-sm);
     transition: transform 180ms ease, filter 180ms ease, box-shadow 180ms ease;
+    will-change: transform, filter, box-shadow;
 }
 
 #map .leaflet-control-zoom:hover {
@@ -2389,5 +2473,135 @@ body[data-mode="questions"].is-points-scoring .points-stats-row {
     
     .points-popup__breakdown {
         font-size: 14px;
+    }
+}
+
+/* ============================================
+   Global UI Polish: Fancy, Flashy, Snappy
+   Non-intrusive micro-interactions and animations
+   ============================================ */
+
+/* Generic button micro-interactions (without changing behavior) */
+#controls button,
+.points-summary-actions button,
+button.home-button,
+.mode-intro__back,
+.mode-intro__more,
+.mode-intro__play {
+    will-change: transform, filter, box-shadow;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Subtle hover sheen */
+#controls button:not(:disabled)::after,
+.points-summary-actions button:not(:disabled)::after,
+button.home-button::after,
+.mode-intro__back::after,
+.mode-intro__play::after {
+    content: '';
+    position: absolute;
+    top: -120%;
+    left: -120%;
+    width: 240%;
+    height: 240%;
+    background: radial-gradient( circle at 30% 30%, rgba(255,255,255,0.16), transparent 45% );
+    transform: translate3d(0,0,0) rotate(0.001deg);
+    opacity: 0;
+    transition: opacity 220ms ease, transform 600ms ease;
+    pointer-events: none;
+}
+
+#controls button:hover::after,
+.points-summary-actions button:hover::after,
+button.home-button:hover::after,
+.mode-intro__back:hover::after,
+.mode-intro__play:hover::after {
+    opacity: 1;
+    transform: translate3d(6%,6%,0) rotate(0.001deg);
+}
+
+/* Press ripple (CSS-only, quick and lightweight) */
+#controls button:active::before,
+.points-summary-actions button:active::before,
+button.home-button:active::before,
+.mode-intro__back:active::before,
+.mode-intro__play:active::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at var(--rx,50%) var(--ry,50%), rgba(255,255,255,0.12), transparent 40%);
+    animation: btn-ripple 420ms ease;
+    pointer-events: none;
+}
+
+@keyframes btn-ripple {
+    0% { opacity: 0.3; }
+    60% { opacity: 0.18; }
+    100% { opacity: 0; }
+}
+
+/* Home deck cards: extra sheen and lift on hover (keep GPU-friendly) */
+.home-deck .home-mode {
+    will-change: transform, opacity, filter;
+}
+
+.home-deck .home-mode:hover::before {
+    background:
+        radial-gradient(900px 540px at 20% 10%, rgba(255, 255, 255, 0.16) 0%, rgba(255, 255, 255, 0.0) 55%),
+        linear-gradient(145deg, rgba(255, 255, 255, 0.12), rgba(0, 0, 0, 0.16));
+}
+
+/* Splitter: subtle glow on hover for better affordance */
+.splitter:hover::before {
+    background: color-mix(in srgb, var(--border) 60%, rgba(255,255,255,0.35));
+    box-shadow: 0 0 0 6px rgba(255, 255, 255, 0.04);
+}
+
+/* Points timer: gentle breathing glow */
+
+@keyframes timer-breathe {
+    0% { filter: brightness(1.0); transform: translateZ(0) scale(1); }
+    50% { filter: brightness(1.06); transform: translateZ(0) scale(1.02); }
+    100% { filter: brightness(1.0); transform: translateZ(0) scale(1); }
+}
+
+/* Result popup: slight pop-in when shown */
+
+@keyframes result-pop-in {
+    0% { transform: translateX(-50%) translateY(10px) scale(0.985); opacity: 0.0; }
+    100% { transform: translateX(-50%) translateY(0) scale(1); opacity: 1; }
+}
+
+/* Map zoom control polish already centered; add hover lift */
+
+/* Question/Radar cards: add subtle hover feedback */
+
+.question-panel__card:hover,
+.radar-panel__card:hover {
+    transform: translateY(-2px) scale(1.01);
+    filter: brightness(1.04);
+    box-shadow: 0 16px 42px rgba(0, 0, 0, 0.52);
+}
+
+/* Points summary card: entrance pop and sheen */
+
+@keyframes summary-pop {
+    0% { transform: translateY(16px) scale(0.985); opacity: 0.0; }
+    100% { transform: translateY(0) scale(1); opacity: 1; }
+}
+
+/* Global reduced-motion respect */
+@media (prefers-reduced-motion: reduce) {
+    #controls button::after,
+    .points-summary-actions button::after,
+    button.home-button::after,
+    .mode-intro__back::after,
+    .mode-intro__play::after,
+    .points-timer,
+    #result,
+    .points-summary-card {
+        animation: none !important;
+        transition: none !important;
     }
 }
